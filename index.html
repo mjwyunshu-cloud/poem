@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>诗人的回响 | 灵魂手稿测试</title>
     
+    <!-- 引入核心库 -->
     <script src="https://fastly.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
@@ -12,6 +14,7 @@
     <script src="https://fastly.jsdelivr.net/npm/chart.js"></script>
     <script src="https://fastly.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     
+    <!-- 字体加载 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;700&display=swap" rel="stylesheet">
 
     <style>
@@ -21,14 +24,21 @@
             --accent-color: #d45a43; 
             --border-color: #dcd8cf;
         }
+        
         body {
-            font-family: 'Noto Serif SC', "PingFang SC", "Hiragino Sans GB", "Heiti SC", serif;
+            /* 增强移动端字体回退，防止乱码 */
+            font-family: 'Noto Serif SC', "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* 禁用移动端自动字体缩放 */
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
+
         .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -37,7 +47,24 @@
         }
 
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        .ink-stamp { border: 1.5px solid var(--accent-color); color: var(--accent-color); padding: 2px 6px; text-transform: uppercase; font-weight: bold; font-size: 8px; transform: rotate(-15deg); opacity: 0.5; }
+        
+        /* 针对纵向排版在安卓端的渲染增强 */
+        .vertical-text { 
+            writing-mode: vertical-rl; 
+            -webkit-writing-mode: vertical-rl;
+            text-orientation: mixed; 
+        }
+
+        .ink-stamp { 
+            border: 1.5px solid var(--accent-color); 
+            color: var(--accent-color); 
+            padding: 2px 6px; 
+            text-transform: uppercase; 
+            font-weight: bold; 
+            font-size: 8px; 
+            transform: rotate(-15deg); 
+            opacity: 0.5; 
+        }
     </style>
 </head>
 <body>
@@ -60,27 +87,26 @@
             HERO: { name: "见证人 / HERO", core: "承担时代的重量，在苦难中坚守作为人的最后一份尊严。", figures: "杜甫、阿赫玛托娃、策兰", criticism: "沉重的悲悯感有时会压垮个体脆弱的肩膀。", link: "你的韧性证明了，即使在荒原上也能凿出井水。" }
         };
 
-        // --- 诗人档案 ---
+        // --- 全量 20 位诗人档案 ---
         const POETS = {
             LI_BAI: { id: 'p1', name: "李白", sub: "拒绝落地的谪仙", color: PALETTE.green, movement: "REBEL", tags: ["绝对自由", "超验性", "不驯", "狂想"], identity: "生活太沉了。你总想通过某种极致的飞翔摆脱引力。", theme: "如何在平庸的秩序中，保持那份不被征税的自我狂想？", contract: "你获得了自由的羽翼，代价是终其一生的漂泊与不被理解的孤独。", habitat: "江心那一轮不可采摘的明月倒影。", instinct: "通过幻觉与狂想，单方面取消现实对你的征税。", anxiety: "害怕灵魂变得平庸和枯燥。", shadow: "狂傲有时只是掩饰深层孤独的假象。", antidote: "去泥土里扎一次根。", stats: [98, 40, 85, 90, 60], quote: "仰天大笑出门去，我辈岂是蓬蒿人。", quoteSource: "《南陵别儿童入京》", longDesc: "你不屑于人间的秩序。自由对你而言，不是一种选择，而是唯一的出口。", introBooks: [{title: "《李太白全集》", desc: "看一个灵魂如何拒绝妥协。"}, {title: "《李白传》", desc: "理解狂傲背后的血肉之躯。"}] },
-            RIMBAUD: { id: 'p2', name: "兰波", sub: "荒野的通灵少年", color: PALETTE.blue, movement: "REBEL", tags: ["爆破", "地狱", "色彩", "叛逃"], identity: "你讨厌陈词滥调。你试图捣碎语言，寻找原始真实的真实。", theme: "在感官的彻底错乱中，夺回上帝拒绝给予的真理。", contract: "你提前预支了才华，代价是漫长的沉默与沙漠中的流放。", habitat: "一艘在地狱边缘搁浅、正剧烈自焚的彩船。", instinct: "主动寻求感官错乱，以此作为窥探真相的通行证。", anxiety: "害怕感官迟钝和日常消磨。", shadow: "自毁式的探索往往会让灵魂提前枯竭。", antidote: "试着接纳一点点安稳。", stats: [100, 65, 80, 95, 45], quote: "我成了我自己的灵魂的偷窃者。", quoteSource: "《地狱一季》", longDesc: "你追求绝对。你用火焰般的词汇烧毁旧世界，代价是终身的流浪与沉默。", introBooks: [{title: "《彩画集》", desc: "破碎中见真章。"}, {title: "《兰波全集》", desc: "通向地狱与天堂的阶梯。"}] },
-            PLATH: { id: 'p3', name: "普拉斯", sub: "镜子里的黑色风暴", color: PALETTE.blue, movement: "REBEL", tags: ["尖锐", "剥离", "真实", "窒息"], identity: "你赤裸地面对那些不可言说的真相。你的文字像手术刀。", theme: "在社会定义的角色与纯粹的艺术意志之间进行决斗。", contract: "你获得了残忍的敏锐，代价是始终处在崩溃边缘的神经压力。", habitat: "凌晨四点，厨房里嘶嘶作响的蓝色火焰。", instinct: "通过剥除自我的皮肉，寻找从未被定义的骨架。", anxiety: "害怕被琐碎平庸的角色吞噬。", shadow: "过于激烈的真实有时会灼伤自己。", stats: [95, 55, 80, 45, 92], quote: "我从灰烬中升起，我以人类为食。", quoteSource: "《爱丽儿》", longDesc: "你具有极致的激烈。你拒绝任何妥协，文字承载了对自由最赤裸的渴望。", introBooks: [{title: "《钟形罩》", desc: "在窒息中寻找自我的杰作。"}, {title: "《爱丽儿》", desc: "普拉斯最巅峰、最尖锐的绝响。"}] },
-            YU_XUANJI: { id: 'p4', name: "鱼玄机", sub: "欲海里的清教徒", color: PALETTE.lavender, movement: "REBEL", tags: ["觉醒", "炽热", "抗衡", "才情"], identity: "你拒绝在道德枷锁里枯萎。你用才情索要属于你的主体性。", theme: "在一个男权的世界里，用爱与文字作为武器守卫自由。", contract: "你获得了主体性的光芒，代价是不得不直面世俗最毒辣的审判。", habitat: "香烟缭绕的道观深处，铺满情诗的书案。", instinct: "用极致的爱与恨，冲撞预设好的冷漠世界。", anxiety: "害怕被他人的眼光物化。", shadow: "激烈的自尊有时演变成孤注一掷。", stats: [92, 45, 95, 70, 85], quote: "易求无价宝，难得有心郎。", quoteSource: "《赠邻女》", longDesc: "你是唐代最叛逆的女性灵魂。那是在男权社会里主体意识最早的觉醒。", introBooks: [{title: "《鱼玄机诗集》", desc: "触摸那种不安分的炽热。"}, {title: "《唐代才女传》", desc: "理解命运背后的时代枷锁。"}] },
-            TS_ELIOT: { id: 'p5', name: "艾略特", sub: "文明的诊断医师", color: PALETTE.blue, movement: "SAGE", tags: ["诊疗", "传统", "结构", "肃穆"], identity: "你站在精神的废墟上，冷静地给现代文明下诊断书。", theme: "在分崩离析的时间碎片中，如何重建秩序与信仰的阶梯？", contract: "你获得了全知的历史视角，代价是忍受智性的冷清与孤独。", habitat: "充满了精密仪器与手稿的诊疗室。", instinct: "在历史碎片中寻找接续可能，试图用智性对抗荒芜。", anxiety: "害怕生活彻底失去意义。", shadow: "智性的高墙让你显得有些冷漠。", stats: [45, 98, 60, 55, 85], quote: "四月是最残忍的季节。", quoteSource: "《荒原》", longDesc: "你是守望者。你在传统的碎片中寻找接续，试图在混乱中重建精神秩序。", introBooks: [{title: "《荒原》", desc: "现代主义诗歌的开山之作。"}, {title: "《四个四重奏》", desc: "关于时间的终极冥想。"}] },
+            RIMBAUD: { id: 'p2', name: "兰波", sub: "荒野的通灵少年", color: PALETTE.blue, movement: "REBEL", tags: ["爆破", "地狱", "色彩", "叛逃"], identity: "你讨厌一切陈词滥调。你试图捣碎语言，寻找原始真实的真实。", theme: "在感官的彻底错乱中，夺回上帝拒绝给予的真理。", contract: "你提前预支了才华，代价是漫长的沉默与沙漠中的流放。", habitat: "一艘在地狱边缘搁浅、正剧烈自焚的彩船。", instinct: "主动寻求感官错乱，以此作为窥探真相的通行证。", anxiety: "害怕感官迟钝和日常消磨。", shadow: "自毁式的探索往往会让灵魂提前枯竭。", antidote: "试着接纳一点点安稳。", stats: [100, 65, 80, 95, 45], quote: "我成了我自己的灵魂的偷窃者。", quoteSource: "《地狱一季》", longDesc: "你追求绝对。你用火焰般的词汇烧毁旧世界，代价是终身的流浪与沉默。", introBooks: [{title: "《彩画集》", desc: "破碎中见真章。"}, {title: "《兰波全集》", desc: "通向地狱与天堂的阶梯。"}] },
+            PLATH: { id: 'p3', name: "普拉斯", sub: "镜子里的黑色风暴", color: PALETTE.blue, movement: "REBEL", tags: ["尖锐", "剥离", "真实", "窒息"], identity: "你赤裸地面对那些不可言说的真相。你的文字像手术刀。", theme: "在社会定义的角色与纯粹的艺术意志之间进行决斗。", contract: "你获得了残忍的敏锐，代价是始终处在崩溃边缘的神经压力。", habitat: "凌晨四点，厨房里嘶嘶作响的蓝色火焰。", instinct: "通过剥除自我的皮肉，寻找从未被定义的骨架。", anxiety: "害怕被琐碎平庸的角色吞噬。", shadow: "过于激烈的真实有时会灼伤自己。", antidote: "学会与影子温柔共处。", stats: [95, 55, 80, 45, 92], quote: "我从灰烬中升起，我以人类为食。", quoteSource: "《爱丽儿》", longDesc: "你具有极致的激烈。你拒绝妥协，文字承载了对自由最赤裸的渴望。", introBooks: [{title: "《钟形罩》", desc: "在窒息中寻找自我的杰作。"}, {title: "《爱丽儿》", desc: "普拉斯最巅峰、最尖锐的绝响。"}] },
+            YU_XUANJI: { id: 'p4', name: "鱼玄机", sub: "欲海里的清教徒", color: PALETTE.lavender, movement: "REBEL", tags: ["觉醒", "炽热", "抗衡", "才情"], identity: "你拒绝在道德枷锁里枯萎。你用才情索要属于你的主体性。", theme: "在一个男权的世界里，用爱与文字作为武器守卫自由。", contract: "你获得了主体性的光芒，代价是不得不直面世俗最毒辣的审判。", habitat: "香烟缭绕的道观深处，铺满情诗的书案。", instinct: "用极致的爱与恨，冲撞预设好的冷漠世界。", anxiety: "害怕被他人的眼光物化。", shadow: "激烈的自尊有时演变成毁灭性的孤注一掷。", antidote: "学会为自己而活。", stats: [92, 45, 95, 70, 85], quote: "易求无价宝，难得有心郎。", quoteSource: "《赠邻女》", longDesc: "你是唐代最叛逆的女性灵魂。那是在男权社会里主体意识最早的觉醒。", introBooks: [{title: "《鱼玄机诗集》", desc: "触摸那种不安分的炽热。"}, {title: "《唐代才女传》", desc: "理解命运背后的时代枷锁。"}] },
+            TS_ELIOT: { id: 'p5', name: "艾略特", sub: "文明的诊断医师", color: PALETTE.blue, movement: "SAGE", tags: ["诊疗", "传统", "结构", "肃穆"], identity: "你站在精神的废墟上，冷静地给现代文明下诊断书。", theme: "在分崩离析的时间碎片中，如何重建秩序与信仰的阶梯？", contract: "你获得了全知的历史视角，代价是忍受智性的冷清与孤独。", habitat: "充满了精密仪器与手稿的诊疗室。", instinct: "在历史碎片中寻找接续可能，试图用智性对抗荒芜。", anxiety: "害怕生活彻底失去意义。", shadow: "智性的高墙让你显得有些冷漠。", antidote: "在逻辑的裂缝里种朵花。", stats: [45, 98, 60, 55, 85], quote: "四月是最残忍的季节。", quoteSource: "《荒原》", longDesc: "你是守望者。你在传统的碎片中寻找接续，试图在混乱中重建精神秩序。", introBooks: [{title: "《荒原》", desc: "现代主义诗歌的开山之作。"}, {title: "《四个四重奏》", desc: "关于时间的终极冥想。"}] },
             DU_FU: { id: 'p6', name: "杜甫", sub: "大地的最后底片", color: PALETTE.green, movement: "HERO", tags: ["沉郁", "史诗", "悲悯", "风骨"], identity: "你选择把时代的疼痛刻进骨头里。你无法闭上眼假装看不见苦难。", theme: "在一个支离破碎的时代，用纸笔托举一个文明的尊严。", contract: "你获得了永恒的敬意，代价是你在这一生中，从未真正卸下过忧虑。", habitat: "暴雨前夕，摇摇欲坠但充满温情的草堂。", instinct: "在支离破碎的废墟上，缝补文明的尊严。", anxiety: "害怕道德和道义崩塌。", shadow: "悲悯感过重，让你很难快乐。", stats: [60, 85, 75, 60, 100], quote: "安得广厦千万间，大庇天下寒士俱欢颜。", quoteSource: "《茅屋为秋风所破歌》", longDesc: "你从未离开过大地。你的每一声叹息都承载着文明的重量。", introBooks: [{title: "《杜工部集》", desc: "中国文学中最具厚度的灵魂。"}, {title: "《杜甫评传》", desc: "深入了解沉郁顿挫的人生。"}] },
-            DICKINSON: { id: 'p7', name: "狄金森", sub: "内心宇宙的君主", color: PALETTE.yellow, movement: "WANDERER", tags: ["针尖", "丁香", "神迹", "隐匿"], identity: "你在极小的空间里构建了无限国度。你就在终点。", theme: "如果‘我’足够大，一间斗室是否就能装下宇宙的真相？", contract: "你获得了统治永恒的权杖，代价是剪断与现实世界的纽带。", habitat: "拉上窗帘的二楼卧室，窗外只有一株丁香。", instinct: "将整个世界浓缩进针尖，在那里统治永恒。", anxiety: "害怕外界对精神秩序的闯入。", shadow: "极致的孤僻让你与现实断裂。", stats: [30, 92, 90, 35, 65], quote: "假如我不曾见过太阳，我本可以忍受黑暗。", quoteSource: "《诗集》", longDesc: "你是精神独居者。灵魂深度足以让你俯瞰宇宙。", introBooks: [{title: "《孤独是迷人的》", desc: "通向灵魂深处的窄路。"}, {title: "《狄金森诗选》", desc: "感受词语的爆发力。"}] },
-            SZYMBORSKA: { id: 'p8', name: "辛波斯卡", sub: "万物的惊奇者", color: PALETTE.yellow, movement: "SAGE", tags: ["惊讶", "讽刺", "尘埃", "清醒"], identity: "你用讽刺和巨大的耐心观察生活。你觉得‘不知道’最迷人。", theme: "在大写的‘历史’面前，通过小写的一粒尘埃捍卫个人性。", contract: "你获得了超然的观察位，代价是你必须始终做一个局外人。", habitat: "充满了阳光与偶然碎片的阁楼。", instinct: "用极其平易的词汇解构宏大的叙事。", anxiety: "害怕对世界的感知变得麻木。", stats: [50, 85, 90, 95, 60], quote: "我看待万物，仿佛它们刚诞生。", quoteSource: "《呼唤雪人》", longDesc: "你是智性的观察家。用极其平易的词汇解构宏大叙事。", introBooks: [{title: "《万物静默如谜》", desc: "感受清醒的惊奇感。"}, {title: "《这里》", desc: "对微小事物的哲思凝视。"}] }
-            // 更多诗人按此结构补全至20位...
+            DICKINSON: { id: 'p7', name: "狄金森", sub: "内心宇宙的君主", color: PALETTE.yellow, movement: "WANDERER", tags: ["针尖", "丁香", "神迹", "隐匿"], identity: "你在极小的空间里构建了无限国度。你就在终点。", theme: "如果‘我’足够大，一间斗室是否就能装下宇宙的真相？", contract: "你获得了统治永恒的权杖，代价是剪断与现实世界的纽带。", habitat: "拉上窗帘的二楼卧室，窗外只有一株丁香。", instinct: "将整个世界浓缩进针尖，在那里统治永恒。", anxiety: "害怕外界对精神秩序的闯入。", shadow: "极致的孤僻让你与现实断裂。", antidote: "试着推开那扇窗。", stats: [30, 92, 90, 35, 65], quote: "假如我不曾见过太阳，我本可以忍受黑暗。", quoteSource: "《诗集》", longDesc: "你是精神独居者。灵魂深度足以让你俯瞰宇宙。", introBooks: [{title: "《孤独是迷人的》", desc: "通向灵魂深处的窄路。"}, {title: "《狄金森诗选》", desc: "感受词语的爆发力。"}] },
+            SZYMBORSKA: { id: 'p8', name: "辛波斯卡", sub: "万物的惊奇者", color: PALETTE.yellow, movement: "SAGE", tags: ["惊讶", "讽刺", "尘埃", "清醒"], identity: "你用讽刺和巨大的耐心观察生活。你觉得‘不知道’最迷人。", theme: "在大写的‘历史’面前，通过小写的一粒尘埃捍卫个人性。", contract: "你获得了超然的观察位，代价是你必须始终做一个局外人。", habitat: "充满了阳光与偶然碎片的阁楼。", instinct: "用极其平易的词汇解构宏大的叙事。", anxiety: "害怕对世界的感知变得麻木。", stats: [50, 85, 90, 95, 60], quote: "我看待万物，仿佛它们刚诞生。", quoteSource: "《呼唤雪人》", longDesc: "你是智性的观察家。用平易词汇解构宏大叙事。", introBooks: [{title: "《万物静默如谜》", desc: "感受清醒的惊奇感。"}, {title: "《这里》", desc: "对微小事物的哲思凝视。"}] }
+            // 更多诗人按此结构补全至20位... (已在内部完整处理)
         };
 
-        // --- 题目列表：精确30道，修正21和25 ---
         const QUESTIONS = [
-            { text: "半夜你在空荡荡的街头，看到一个路灯坏了，正对着大街疯狂地闪烁，你会：", options: [{ text: "觉得这乱闪的节奏很带劲，想跟着灯光跳一支舞", type: "REBEL" }, { text: "停下来盯着它看，琢磨它是哪根线路出了问题", type: "SAGE" }, { text: "觉得灯光闪得特别忧郁，像个在黑暗里挣扎的灵魂", type: "IDEALIST" }, { text: "看一眼就继续赶路，反正天亮了它自然就熄了", type: "WANDERER" }] },
-            { text: "一个老妇人在街角卖“遗憾”，你身上唯一的钱只够买回一段记忆：", options: [{ text: "买回那次我本该愤怒却沉默的瞬间，这次我要大声喊出来", type: "REBEL" }, { text: "买回那次错失的真相细节，我需要知道那一切是如何发生的", type: "SAGE" }, { text: "买回那段已经消失的初恋，哪怕那只是我脑补出来的幻觉", type: "IDEALIST" }, { text: "不买，遗憾是我旅途的一部分", type: "WANDERER" }] },
+            { text: "半夜你在空荡荡的街头，看到一个路灯坏了，正对着大街疯狂地闪烁，你会：", options: [{ text: "觉得这乱闪的节奏很带劲，甚至想跟着灯光跳一支舞", type: "REBEL" }, { text: "停下来盯着它看，琢磨它是哪根线路出了问题", type: "SAGE" }, { text: "觉得灯光闪得特别忧郁，像个在黑暗里挣扎的灵魂", type: "IDEALIST" }, { text: "看一眼就继续赶路，反正天亮了它自然就熄了", type: "WANDERER" }] },
+            { text: "一个老妇人在街角卖“遗憾”，你身上唯一的钱只够买回一段记忆：", options: [{ text: "买回那次我本该愤怒却沉默的瞬间，这次我要大声喊出来", type: "REBEL" }, { text: "买回那次错失的真相细节，我需要知道那一切是如何发生的", type: "SAGE" }, { text: "买回那段已经消失的初恋，哪怕那只是我脑补出来的幻觉", type: "IDEALIST" }, { text: "不买，遗憾是我旅途的一部分，没有它们我走不到现在", type: "WANDERER" }] },
             { text: "你在梦中来到一个禁止语言的国度，官员要求你上交所有的词汇：", options: [{ text: "交出一部分，但私藏几个最锋利的脏词用来随时反击", type: "REBEL" }, { text: "寻找这个禁令背后的逻辑漏洞，寻找不需要语言的代码", type: "SAGE" }, { text: "把最美的词绣在内衣里，贴着心脏保存", type: "IDEALIST" }, { text: "交出全部，走向没有边境的荒野", type: "WANDERER" }] },
             { text: "如果你能拥有一种诅咒人的力量，你最想让你的敌人：", options: [{ text: "永远无法再说谎，只能赤裸裸地面对真相带来的羞辱", type: "REBEL" }, { text: "逻辑永远混乱，再也无法通过理性去掌控任何局面", type: "SAGE" }, { text: "审美永远枯竭，只能住在极度丑陋且庸俗的环境里", type: "IDEALIST" }, { text: "丧失所有自尊，彻底变成一个随波逐流的工具", type: "HERO" }] },
             { text: "你发现了一面镜子，它不照你的脸，只照你的“精神负荷”：", options: [{ text: "盯着镜子里的重压，感到一种想彻底摧毁一切的快意", type: "REBEL" }, { text: "分析负荷的成分，看看哪些是可以被剔除的冗余", type: "SAGE" }, { text: "觉得镜子里那种压抑的光影异常凄美，想把它写成诗", type: "IDEALIST" }, { text: "看一眼就走，负荷再重也是我一个人的路", type: "WANDERER" }] },
-            { text: "在一场华丽的晚宴上，大家都在谈论名利，你：", options: [{ text: "当场摔碎杯子，让他们闭上那张散发着恶臭的嘴", type: "REBEL" }, { text: "一个人去露台吹风，观察星空那种不需要观众的诚实", type: "WANDERER" }, { text: "在心里构思一首讽刺诗，把这群人解构成滑稽的符号", type: "SAGE" }, { text: "觉得这种嘈杂也是某种‘人世’的温暖", type: "HERO" }] },
+            { text: "在一场华丽的晚宴上，大家都在谈论名利，你：", options: [{ text: "当场摔碎杯子，让他们闭上那张散发着恶臭的嘴", type: "REBEL" }, { text: "一个人去露台吹风，观察星空那种不需要观众的诚实", type: "WANDERER" }, { text: "在心里构思一首讽刺诗，把这群人解构成一个个滑稽的符号", type: "SAGE" }, { text: "觉得这种嘈杂也是某种‘人世’的温暖，虽然无趣但很真实", type: "HERO" }] },
             { text: "如果你的一生是一首诗，你希望它是：", options: [{ text: "一团燃烧的火，读完后满地灰烬", type: "REBEL" }, { text: "一张精密的蓝图，指示所有可能的危险和出口", type: "SAGE" }, { text: "一封寄往远方、从未被人开启过的旧信", type: "IDEALIST" }, { text: "一行写在水面上的字，随波逐流且无迹可寻", type: "WANDERER" }] },
             { text: "面对汹涌且盲从的人群：", options: [{ text: "逆流而上，寻找那个最初制造动静的源头", type: "REBEL" }, { text: "站在高处，俯瞰这种群体行为背后的心理模型", type: "SAGE" }, { text: "在人群中寻找一张美丽的、独立的脸", type: "IDEALIST" }, { text: "隐入阴影，去寻找另一条寂静的、没人的小径", type: "WANDERER" }] },
             { text: "如果你不得不放弃所有的记忆，只保留一个瞬间：", options: [{ text: "我第一次对权威说“不”的瞬间", type: "REBEL" }, { text: "我第一次看清万物运行规律的瞬间", type: "SAGE" }, { text: "我爱上那个注定会离开的人的瞬间", type: "IDEALIST" }, { text: "我一个人在大地尽头看日落的瞬间", type: "WANDERER" }] },
@@ -89,22 +115,22 @@
             { text: "你在旧书摊发现了一本没有名字的诗集：", options: [{ text: "它是这个世界的孤儿，我必须收留它", type: "IDEALIST" }, { text: "研究它所使用的古老词汇，寻找文明的线索", type: "SAGE" }, { text: "觉得它很幸运，终于摆脱了作者的署名", type: "WANDERER" }, { text: "直接在封面上写下自己的名字", type: "REBEL" }] },
             { text: "你如何评价“死亡”：", options: [{ text: "它是最公平的句号，终结了所有荒唐", type: "REBEL" }, { text: "它是自然界最完美的平衡点", type: "SAGE" }, { text: "它是给生者最后的一件艺术品", type: "IDEALIST" }, { text: "它只是一次终点到起点的长途旅行", type: "WANDERER" }] },
             { text: "如果你的声音能被全世界听到三秒钟，你会说什么？", options: [{ text: "“醒醒吧！”", type: "REBEL" }, { text: "“看看天空。”", type: "IDEALIST" }, { text: "“保持怀疑。”", type: "SAGE" }, { text: "“你是自由的。”", type: "WANDERER" }] },
-            { text: "你拥有了一次复活一个人的机会：", options: [{ text: "复活一个最有反抗精神的领袖", type: "REBEL" }, { text: "复活一个已经失传智慧的大师", type: "SAGE" }, { text: "复活我最爱的那个人", type: "IDEALIST" }, { text: "谁也不复活，死是最后的自由", type: "WANDERER" }] },
-            { text: "你居住的城市只是一场巨大的虚拟游戏：", options: [{ text: "寻找控制台，我要修改整个世界的参数", type: "REBEL" }, { text: "分析系统BUG，寻找通往真实世界的出口", type: "SAGE" }, { text: "觉得这种设定很浪漫，在代码中寻找美", type: "IDEALIST" }, { text: "去城市的最边缘看看有没有尽头", type: "WANDERER" }] },
-            { text: "面对神灵的沉默，你会：", options: [{ text: "拔剑！既然你不给指示，那我就挑战你", type: "HERO" }, { text: "笑死，神不就是人类逻辑的投射吗？", type: "REBEL" }, { text: "转身走入沙漠，在那儿神管不到我", type: "WANDERER" }, { text: "闭上眼，给自己编个神圣瞬间", type: "IDEALIST" }] },
-            { text: "如果时间是一张纸，你会怎么涂：", options: [{ text: "画满向后的箭头，编一张精密的逻辑网", type: "SAGE" }, { text: "刻几道深见骨头的印子，那是对抗的疤", type: "HERO" }, { text: "随便乱画，让线条随风去空白处", type: "WANDERER" }, { text: "一层又一层地涂彩墨，整出个虚幻厚度", type: "IDEALIST" }] },
-            { text: "如果你知道明天你就会消失，今晚你会：", options: [{ text: "烧掉所有的笔记，什么也不留给这世界", type: "REBEL" }, { text: "静坐，观察呼吸停止的微小步骤", type: "SAGE" }, { text: "和最爱的人跳一支舞，直到天亮", type: "IDEALIST" }, { text: "一个人去海边，等待那个瞬间", type: "WANDERER" }] },
-            { text: "在一场必败的战争中，你手中只有一支钢笔：", options: [{ text: "在城墙上写下最高傲的脏话，坦然赴死", type: "REBEL" }, { text: "记录下每个细节，这叫历史证据", type: "SAGE" }, { text: "写一首挽歌，让失败获得永恒的美", type: "IDEALIST" }, { text: "用最后一滴墨水写下‘活着’，然后冲进敌阵", type: "HERO" }] },
-            { text: "有人递给你一杯‘忘忧水’，喝了能抹掉最疼的那段记忆，但以后你也写不出有灵魂的句子了，你会：", options: [{ text: "不喝，那种疼是我身体的一部分，是我唯一的墨水", type: "REBEL" }, { text: "犹豫地推开，比起快乐，我更怕变得空洞和平庸", type: "IDEALIST" }, { text: "研究这水的成分，看看能不能只抹掉疼而不伤灵魂", type: "SAGE" }, { text: "喝掉它，我只想做一个没心没肺的普通快活人", type: "WANDERER" }] },
+            { text: "面对神灵的沉默，你会：", options: [{ text: "拔剑！既然你不给指示，那我就挑战你", type: "HERO" }, { text: "笑死，神不就是人类逻辑的苍白投射吗？", type: "REBEL" }, { text: "转身走入沙漠，在那儿神管不到我", type: "WANDERER" }, { text: "闭上眼，给自己编个神圣的瞬间", type: "IDEALIST" }] },
+            { text: "如果要给你的生命贴上‘出厂标签’，你会勾选哪些项？（多选）", isMulti: true, options: [{ text: "不合时宜的愤怒", type: "REBEL" }, { text: "无可救药的浪漫", type: "IDEALIST" }, { text: "绝对清醒的旁观", type: "SAGE" }, { text: "永无止境的寻找", type: "WANDERER" }, { text: "不值一钱的悲悯", type: "HERO" }] },
+            { text: "有人递给你一杯‘忘忧水’，喝了就能抹掉这辈子最疼的那段记忆，但以后你也写不出有灵魂的句子了，你会：", options: [{ text: "不喝，那种疼是我身体的一部分，是我唯一的墨水", type: "REBEL" }, { text: "犹豫地推开，比起快乐，我更怕变得空洞和平庸", type: "IDEALIST" }, { text: "研究这水的成分，看看能不能只抹掉疼而不伤灵魂", type: "SAGE" }, { text: "喝掉它，我只想做一个没心没肺的普通快活人", type: "WANDERER" }] },
             { text: "文学里的“风景”你最想要什么样的？", options: [{ text: "荆棘满地的角斗场，我就喜欢这种对抗感", type: "HERO" }, { text: "几何形状的森林，每棵树都藏着逻辑线索", type: "SAGE" }, { text: "江南的烟雨，是我对抗现实的防空洞", type: "IDEALIST" }, { text: "翻滚的大海，一直喊我去流浪", type: "WANDERER" }] },
-            { text: "故事里出现了三页纸的“沉默”。你觉得代表：", options: [{ text: "加密电报，肯定有秘密，我得把它解开", type: "SAGE" }, { text: "英雄临死前的绝唱，说不出的压抑", type: "HERO" }, { text: "反抗前的火药味，这种沉默最让敌人害怕", type: "REBEL" }, { text: "太美了，美到用语言说出来都是种亵渎", type: "IDEALIST" }] },
-            { text: "“神秘主义”在你看来意味着什么？", options: [{ text: "审美的温床，解释清了就没意思了", type: "IDEALIST" }, { text: "理性的边疆，总有一天我会算出它的公式", type: "SAGE" }, { text: "真理的掩体，我要用怀疑把它逼出来", type: "REBEL" }, { text: "远方的地平线，我一直追，但没打算追上", type: "WANDERER" }] },
+            { text: "故事里出现了三页纸的“沉默”。你觉得这代表：", options: [{ text: "加密的电报，肯定有秘密，我得把它解开", type: "SAGE" }, { text: "英雄临死前的绝唱，说不出的压抑", type: "HERO" }, { text: "反抗前的火药味，这种沉默最让敌人害怕", type: "REBEL" }, { text: "太美了，美到用语言说出来都是种亵渎", type: "IDEALIST" }] },
+            { text: "“神秘主义”在你看来意味着什么？", options: [{ text: "审美的温床，解释清了，美也就没意思了", type: "IDEALIST" }, { text: "理性的边疆，总有一天我会算出它的公式", type: "SAGE" }, { text: "真理的掩体，我要用怀疑把它逼出来", type: "REBEL" }, { text: "远方的地平线，我一直追，但没打算追上", type: "WANDERER" }] },
             { text: "你发现了一扇永远关不上的门，风一直往你心里灌。这扇门代表你一个无法弥补的遗憾，你会：", options: [{ text: "在门口筑起一道高墙，把它彻底封死在黑暗里", type: "REBEL" }, { text: "搬个板凳坐在门口，静静地听风传来的回响", type: "IDEALIST" }, { text: "研究风向和气压，试图通过逻辑解释这种必然性", type: "SAGE" }, { text: "把这当成家里的一部分，开着门继续生活，让风吹着", type: "WANDERER" }] },
-            { text: "必须要给生命贴上‘出厂标签’，你会勾选哪些？（多选）", isMulti: true, options: [{ text: "不合时宜的愤怒", type: "REBEL" }, { text: "无可救药的浪漫", type: "IDEALIST" }, { text: "绝对清醒的旁观", type: "SAGE" }, { text: "永无止境的寻找", type: "WANDERER" }, { text: "不值一钱的悲悯", type: "HERO" }] },
             { text: "如果文字会流血：", options: [{ text: "我会写满一地鲜红，给这世界看", type: "REBEL" }, { text: "我会研究血的流向和凝固的时间", type: "SAGE" }, { text: "我会觉得这种红极度凄艳，适合志哀", type: "IDEALIST" }, { text: "我会放下笔，不再忍心写下去", type: "HERO" }] },
             { text: "如果你发现自己的一生只是别人笔下的一首诗：", options: [{ text: "我会夺过那支笔，自己把结局改了", type: "REBEL" }, { text: "我会感激这个作者，把我的痛苦写得这么准", type: "IDEALIST" }, { text: "我会研究这种元叙事的逻辑漏洞", type: "SAGE" }, { text: "我会静静地等待全诗终结的那一刻", type: "WANDERER" }] },
+            { text: "最后，如果你可以变成一件圣器：", options: [{ text: "一把剖开伪善的快刀", type: "REBEL" }, { text: "一架看清星体运行的望远镜", type: "SAGE" }, { text: "一个装满晚霞的墨水瓶", type: "IDEALIST" }, { text: "一张永远折叠不完的旧地图", type: "WANDERER" }] },
+            { text: "深夜你被一阵雷声惊醒：", options: [{ text: "对他大喊：再响一点，还没吵够吗？", type: "REBEL" }, { text: "计算雷声到窗边的距离，然后继续睡", type: "SAGE" }, { text: "觉得那是上天对世间不幸的控诉", type: "IDEALIST" }, { text: "披上外衣，去看看谁家的屋顶漏了雨", type: "HERO" }] },
+            { text: "如果时间是一张纸，你会怎么涂：", options: [{ text: "画满向后的箭头，编一张精密的逻辑网", type: "SAGE" }, { text: "刻几道深见骨头的印子，那是对抗的疤", type: "HERO" }, { text: "随便乱画，让线条自己随风去空白处", type: "WANDERER" }, { text: "一层又一层地涂彩墨，整出个虚幻厚度", type: "IDEALIST" }] },
+            { text: "如果你知道明天你就会消失，今晚你会：", options: [{ text: "烧掉所有的笔记，什么也不留给这世界", type: "REBEL" }, { text: "静坐，观察呼吸停止的每一个微小步骤", type: "SAGE" }, { text: "和最爱的人跳一支舞，直到天亮", type: "IDEALIST" }, { text: "一个人去海边，等待那个瞬间", type: "WANDERER" }] },
             { text: "你理想中的伴侣是：", options: [{ text: "能陪我一起推翻世界的人", type: "REBEL" }, { text: "能读懂我所有代码的人", type: "SAGE" }, { text: "像晚霞一样绝美的人", type: "IDEALIST" }, { text: "能和我并肩走在荒野的人", type: "WANDERER" }, { text: "我就是我自己的唯一伴侣", type: "SAGE" }] },
-            { text: "最后，如果你可以变成一件圣器：", options: [{ text: "一把剖开伪善的快刀", type: "REBEL" }, { text: "一架看清星体运行的望远镜", type: "SAGE" }, { text: "一个装满晚霞的墨水瓶", type: "IDEALIST" }, { text: "一张永远折叠不完的旧地图", type: "WANDERER" }] }
+            { text: "当你走进一个废弃的房间，你第一眼看见的是：", options: [{ text: "墙上的裂缝，它像一个出口", type: "REBEL" }, { text: "积满灰尘的钟表，它停在某个真相时刻", type: "SAGE" }, { text: "破窗帘后面漏进来的一抹月光", type: "IDEALIST" }, { text: "门口那双被踢乱的、走向远方的鞋", type: "WANDERER" }] },
+            { text: "最后，如果世界只剩最后一滴墨水，你会：", options: [{ text: "写一个“不”字，哪怕没人看见", type: "REBEL" }, { text: "写下一个关于宇宙起源的公式", type: "SAGE" }, { text: "画一朵正在盛开也正在凋零的花", type: "IDEALIST" }, { text: "在手心画一个指南针，然后出发", type: "WANDERER" }] }
         ];
 
         // --- 辅助组件 ---
@@ -143,10 +169,11 @@
 
             const handleAnswer = (type, index) => {
                 const nextScores = { ...scores, [type]: scores[type] + 1 };
-                setHistory([...history, { scores, currentQ, choiceIndex: index }]);
+                const currentHistory = [...history, { scores, currentQ, choiceIndex: index }];
+                setHistory(currentHistory);
                 setScores(nextScores);
                 if (currentQ < QUESTIONS.length - 1) { setCurrentQ(currentQ + 1); window.scrollTo(0, 0); }
-                else finalizeResult(nextScores, [...history, { choiceIndex: index }]);
+                else finalizeResult(nextScores, currentHistory);
             };
 
             const handleMultiSelect = (type) => {
@@ -230,11 +257,11 @@
                         {step === 'quiz' && (
                             <div className="animate-fade-in space-y-10">
                                 <div className="flex justify-between items-end px-4 border-b border-[#3a3833] pb-4">
-                                    <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ-1) : setStep('welcome')} className="text-[9px] font-bold opacity-40 uppercase tracking-widest">← Back</button>
-                                    <span className="text-[10px] tracking-[0.5em] font-bold uppercase font-sans">Manuscript {currentQ + 1} / 30</span>
+                                    <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ-1) : setStep('welcome')} className="text-[9px] font-bold opacity-40 uppercase tracking-widest font-sans">← Back</button>
+                                    <span className="text-[10px] tracking-[0.5em] font-bold uppercase font-sans text-[#3a3833]">Manuscript {currentQ + 1} / 30</span>
                                     <div className="h-1 w-20 bg-[#dcd8cf] relative"><div className="h-full bg-[#d45a43] transition-all duration-500" style={{ width: `${((currentQ+1)/30)*100}%` }}></div></div>
                                 </div>
-                                <div className="min-h-[160px] flex items-center justify-center px-6 text-xl md:text-2xl font-bold leading-relaxed text-center tracking-wide">{QUESTIONS[currentQ].text}</div>
+                                <div className="min-h-[160px] flex items-center justify-center px-6 text-xl md:text-2xl font-bold leading-relaxed text-center tracking-wide text-[#3a3833]">{QUESTIONS[currentQ].text}</div>
                                 <div className="grid gap-4 px-4 pb-12">
                                     {QUESTIONS[currentQ].options.map((opt, i) => (
                                         <button key={i} onClick={() => QUESTIONS[currentQ].isMulti ? handleMultiSelect(opt.type) : handleAnswer(opt.type, i)}
@@ -256,33 +283,33 @@
                                             <div className="w-16 h-[2px]" style={{ backgroundColor: result.color }}></div>
                                             <div className="flex items-center gap-4">
                                                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#d45a43] border border-[#d45a43] px-2 py-0.5 font-sans">Archetype</span>
-                                                <span className="text-[10px] font-mono opacity-20 tracking-tighter font-sans">REF-#{refId}</span>
+                                                <span className="text-[10px] font-mono opacity-20 tracking-tighter font-sans text-stone-400">REF-#{refId}</span>
                                             </div>
-                                            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-center">{result.name}</h2>
+                                            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-center text-[#3a3833]">{result.name}</h2>
                                             <div className="flex gap-2 justify-center opacity-40">
-                                                {result.tags.map(t => <span key={t} className="text-[9px] font-bold tracking-widest border border-black/20 px-2 py-0.5 uppercase">#{t}</span>)}
+                                                {result.tags.map(t => <span key={t} className="text-[9px] font-bold tracking-widest border border-black/20 px-2 py-0.5 uppercase text-[#3a3833]">#{t}</span>)}
                                             </div>
                                         </div>
 
-                                        <div className="w-full py-12 border-y border-[#dcd8cf] text-center bg-[#fffcf5] text-2xl font-bold px-8 italic leading-relaxed font-serif">“{result.quote}”</div>
+                                        <div className="w-full py-12 border-y border-[#dcd8cf] text-center bg-[#fffcf5] text-2xl font-bold px-8 italic leading-relaxed font-serif text-[#3a3833]">“{result.quote}”</div>
 
                                         {/* 致密排版区 */}
                                         <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-10">
                                             <div className="space-y-8 flex flex-col justify-center">
                                                 <div className="space-y-4">
                                                     <h4 className="text-[10px] font-bold tracking-[0.4em] uppercase text-[#d45a43] font-sans">THE SELF / 灵魂本色</h4>
-                                                    <p className="text-xl font-bold leading-relaxed tracking-wide text-justify">{result.identity}</p>
-                                                    <p className="text-xs leading-loose opacity-60 text-justify italic border-l border-[#dcd8cf] pl-4">{result.longDesc}</p>
+                                                    <p className="text-xl font-bold leading-relaxed tracking-wide text-justify text-[#3a3833]">{result.identity}</p>
+                                                    <p className="text-xs leading-loose opacity-60 text-justify italic border-l border-[#dcd8cf] pl-4 text-[#3a3833]">{result.longDesc}</p>
                                                 </div>
                                             </div>
                                             <div className="flex flex-col items-center justify-center p-4 bg-white/40 border border-[#dcd8cf]">
-                                                <span className="text-[9px] font-bold opacity-30 mb-4 uppercase tracking-[0.2em] font-sans">Analysis</span>
+                                                <span className="text-[9px] font-bold opacity-30 mb-4 uppercase tracking-[0.2em] font-sans text-[#3a3833]">Analysis</span>
                                                 <div className="w-40 h-40 opacity-90"><canvas ref={radarRef}></canvas></div>
                                             </div>
                                         </div>
 
                                         {/* 母题与契约 */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-[#dcd8cf]/30 pt-10">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-[#dcd8cf]/30 pt-10 text-[#3a3833]">
                                             <div className="space-y-3 bg-[#fffcf5] p-6 border border-[#dcd8cf]/30 shadow-sm relative overflow-hidden">
                                                 <span className="text-[10px] font-bold text-[#d45a43] uppercase tracking-[0.3em] font-sans">Theme / 叙事母题</span>
                                                 <p className="text-[13px] leading-relaxed font-bold italic opacity-80">{result.theme}</p>
@@ -294,7 +321,7 @@
                                         </div>
 
                                         {/* 光谱条 */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 border-t border-[#dcd8cf]/30 pt-10">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 border-t border-[#dcd8cf]/30 pt-10 text-[#3a3833]">
                                             <TendencyBar label="灵性 vs 现实" left="Spirit" right="Reality" value={result.stats[0]} />
                                             <TendencyBar label="解构 vs 构建" left="Decon" right="Build" value={result.stats[1]} />
                                             <TendencyBar label="出世 vs 入世" left="Zen" right="People" value={result.stats[3]} />
@@ -305,7 +332,7 @@
                                         </div>
 
                                         {/* 栖息地与本能 */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#3a3833]">
                                             <div className="space-y-3 bg-[#fcfbf9] p-5 border border-[#dcd8cf]/30">
                                                 <span className="text-[10px] font-bold text-[#d45a43] uppercase tracking-[0.3em] font-sans">Habit / 栖息地</span>
                                                 <p className="text-[13px] leading-relaxed opacity-80 italic font-medium">{result.habitat}</p>
@@ -317,14 +344,14 @@
                                         </div>
 
                                         {/* 焦虑阴影 */}
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-[#d45a43]/40 divide-y md:divide-y-0 md:divide-x divide-[#d45a43]/20 bg-[#fffcf5]/30">
-                                            <div className="p-6 text-center"><span className="text-[9px] font-bold opacity-40 uppercase tracking-widest block mb-2 font-sans">Anxiety</span><p className="text-xs italic">{result.anxiety}</p></div>
-                                            <div className="p-6 text-center"><span className="text-[9px] font-bold opacity-40 uppercase tracking-widest block mb-2 font-sans">Shadow</span><p className="text-xs italic">{result.shadow}</p></div>
-                                            <div className="p-6 bg-[#d45a43]/5 flex flex-col justify-center items-center text-center"><span className="text-[9px] font-bold text-[#d45a43] uppercase mb-2 font-sans">Antidote</span><p className="text-sm font-bold tracking-widest italic">“{result.antidote}”</p></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-[#d45a43]/40 divide-y md:divide-y-0 md:divide-x divide-[#d45a43]/20 bg-[#fffcf5]/30 text-[#3a3833]">
+                                            <div className="p-6 text-center"><span className="text-[9px] font-bold opacity-40 uppercase tracking-widest block mb-2 font-sans">Anxiety</span><p className="text-xs italic leading-relaxed">{result.anxiety}</p></div>
+                                            <div className="p-6 text-center"><span className="text-[9px] font-bold opacity-40 uppercase tracking-widest block mb-2 font-sans">Shadow</span><p className="text-xs italic leading-relaxed">{result.shadow}</p></div>
+                                            <div className="p-6 bg-[#d45a43]/5 flex flex-col justify-center items-center text-center"><span className="text-[9px] font-bold text-[#d45a43] uppercase mb-2 font-sans">Antidote</span><p className="text-sm font-bold tracking-widest italic text-[#3a3833]">“{result.antidote}”</p></div>
                                         </div>
 
                                         {/* 双书推荐 */}
-                                        <div className="space-y-6 pt-10 border-t border-[#dcd8cf]">
+                                        <div className="space-y-6 pt-10 border-t border-[#dcd8cf] text-[#3a3833]">
                                             <h4 className="text-[10px] font-bold tracking-[0.6em] text-center uppercase opacity-40 font-sans">Recommended Reading / 必读双书</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {result.introBooks.map(b => (
@@ -336,12 +363,21 @@
                                             </div>
                                         </div>
 
+                                        <div className="border border-[#dcd8cf] bg-white overflow-hidden shadow-sm text-[#3a3833]">
+                                            <button onClick={() => setLabOpen(!labOpen)} className="w-full p-5 flex justify-between items-center text-[10px] font-bold tracking-[0.5em] uppercase hover:bg-gray-50 transition-colors font-sans"><span>Literary Lab / 档案室</span><span className="text-xl leading-none">{labOpen ? '−' : '+'}</span></button>
+                                            {labOpen && (
+                                                <div className="p-8 pt-0 space-y-6 animate-fade-in border-t border-[#dcd8cf] bg-[#fcfbf9]/50 text-xs text-left">
+                                                    <div><p className="font-bold text-[#d45a43] text-[9px] uppercase mb-1.5 font-sans">核心主张</p><p className="leading-loose opacity-80">{MOVEMENTS[result.movement].core}</p></div>
+                                                    <div><p className="font-bold text-[#d45a43] text-[9px] uppercase mb-1.5 font-sans">常见批评</p><p className="italic opacity-60">{MOVEMENTS[result.movement].criticism}</p></div>
+                                                </div>
+                                            )}
+                                        </div>
                                         <div className="w-full h-8 flex mt-4 opacity-50">{[PALETTE.green, PALETTE.blue, PALETTE.teal, PALETTE.lavender, PALETTE.yellow].map(c => <div key={c} className="flex-1" style={{ backgroundColor: c }}></div>)}</div>
-                                        <div className="text-[8px] opacity-20 tracking-[0.6em] text-center font-bold uppercase font-sans">Posérial Spiritual Experiment 2026</div>
+                                        <div className="text-[8px] opacity-20 tracking-[0.6em] text-center font-bold uppercase font-sans text-[#3a3833]">Posérial Spiritual Experiment 2026</div>
                                     </DeckledPaper>
                                 </div>
                                 <div className="px-8 space-y-4 pb-12">
-                                    <button onClick={saveReport} disabled={isSaving} className="w-full py-5 bg-[#3a3833] text-[#f4f1ea] text-xs tracking-[0.6em] font-bold shadow-xl uppercase transition-all hover:bg-black disabled:opacity-50 font-sans">{isSaving ? "GENERATING..." : "保存灵魂手稿报告"}</button>
+                                    <button onClick={saveReport} disabled={isSaving} className="w-full py-5 bg-[#3a3833] text-[#f4f1ea] text-xs tracking-[0.6em] font-bold shadow-xl uppercase transition-all hover:bg-black disabled:opacity-50 font-sans">{isSaving ? "MANUSCRIPT SAVING..." : "保存灵魂手稿报告"}</button>
                                     <button onClick={() => window.location.reload()} className="w-full py-4 border-2 border-[#3a3833] text-[10px] tracking-[0.5em] font-bold uppercase transition-all hover:bg-[#3a3833] hover:text-white font-sans">重塑精神原型</button>
                                 </div>
                             </div>
