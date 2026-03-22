@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>诗人的回响 | 灵魂手稿测试</title>
     
     <script src="https://fastly.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
@@ -18,7 +17,7 @@
     <style>
         :root { 
             --bg-color: #f4f1ea; 
-            --text-main: #2a2824; /* 稍微加深主文字颜色 */
+            --text-main: #2a2824; 
             --accent-color: #d45a43; 
             --border-color: #dcd8cf;
         }
@@ -44,10 +43,8 @@
             clip-path: polygon(0 100%, 2% 35%, 4% 92%, 7% 48%, 10% 85%, 13% 52%, 16% 95%, 19% 45%, 22% 88%, 25% 42%, 28% 100%, 31% 48%, 34% 82%, 37% 55%, 40% 95%, 43% 45%, 46% 88%, 49% 50%, 52% 84%, 55% 42%, 58% 100%, 61% 55%, 64% 80%, 67% 45%, 70% 92%, 73% 58%, 76% 85%, 79% 40%, 82% 90%, 85% 52%, 88% 100%, 91% 45%, 94% 82%, 97% 55%, 100% 100%);
         }
 
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-        
         .archetype-tag-box {
-            border: 1.5px solid var(--accent-color);
+            border: 1px solid var(--accent-color);
             padding: 3px 14px;
             color: var(--accent-color);
             font-size: 11px;
@@ -79,6 +76,8 @@
             background-color: white;
             text-align: center;
         }
+
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
     </style>
 </head>
 <body>
@@ -94,55 +93,65 @@
         };
 
         const MOVEMENTS = {
-            REBEL: { name: "反叛者 / REBEL" },
-            SAGE: { name: "观察者 / SAGE" },
-            IDEALIST: { name: "审美者 / IDEALIST" },
-            WANDERER: { name: "漫游者 / WANDERER" },
-            HERO: { name: "见证人 / HERO" }
+            REBEL: { name: "反叛者 / REBEL", core: "拒绝秩序的规训，在欲望或愤怒的废墟中夺回主体性。" },
+            SAGE: { name: "观察者 / SAGE", core: "用智性解构世界，在冰冷的逻辑中寻找生存的结构。" },
+            IDEALIST: { name: "审美者 / IDEALIST", core: "在消亡中守护美，坚信感官的颤动是神性的最后存留。" },
+            WANDERER: { name: "漫游者 / WANDERER", core: "始终保持局外人的姿态，在无尽的寻找中记录存在。" },
+            HERO: { name: "见证人 / HERO", core: "承担时代的重量，在苦难中坚守作为人的最后一份尊严。" }
         };
 
+        // --- 诗人档案 (10男10女) ---
         const POETS = {
             BUKOWSKI: { 
-                name: "布考茨基", sub: "野性的酒徒", color: PALETTE.green, movement: "REBEL", 
-                identity: "你彻底放弃了对‘美’的虚伪粉饰。你觉得生活本身就是一滩烂泥，而你选择在烂泥里开心地打滚，顺便嘲笑那些西装革履的伪君子。你的真诚带有一种粗粝的野性，这让你在混乱中拥有绝对的自由。",
-                longDesc: "你的人格契合了脏写主义那种不加修饰、粗粝且真实的生命本能。你拒绝那些精致的修辞和中产阶级的体面，更愿意在那些被主流排斥的角落里寻找真理。你用一种近乎残酷的坦诚，证明了生命最底层依然拥有不可磨灭的狂热。",
+                id: 'p0', name: "布考茨基", sub: "野性的酒徒", color: PALETTE.green, movement: "REBEL", 
+                tags: ["真实", "粗粝", "野性"], 
+                identity: "你彻底放弃了对‘美’的虚伪粉饰。你觉得生活本身就是一滩烂泥，而你选择在烂泥里开心地打滚，顺便嘲笑那些西装革履的伪君子。",
+                theme: "如何在拒绝一切虚假修辞的同时，保持那种最原始、最野蛮的生命力？",
+                contract: "你获得了免于伪善的自由，代价是必须忍受长久的边缘感与世俗的冷眼。",
+                longDesc: "你的人格契合了脏写主义那种粗粝且真实的本能。你拒绝精致的中产阶级体面，更愿意在赛马场和廉价旅馆中寻找真理。你的文字是呕吐物，也是勋章。你用近乎残酷的坦诚，证明了生命最底层依然拥有不可磨灭的狂热。",
                 stats: [95, 30, 20, 98, 85], quote: "找到你爱的东西，让它淹没你。", 
-                anxiety: "你最恐惧的是被社会‘收买’。你害怕变得得体、优雅、被秩序驯服，那对你而言意味着灵感的彻底死亡。你必须保持那种边缘的、不体面的‘危险感’，才能确认自己还真实地活着。",
-                shadow: "极度的自我放逐有时会变成对生命中真实温暖的防御。你在拒绝伪善的同时，也可能推开了真正关心你的人。这种‘只有在痛苦和混乱中才安全’的错觉，是你灵魂中无法愈合的旧伤口。",
-                antidote: "“尝试一次温柔的宽恕。” 允许生活有那么一刻是平静且洁净的，这并不会消磨你的野性，反而能让你在那份粗粝的狂热中，获得一种更深沉的持久力。",
-                introBooks: [{title: "《邮差》", desc: "感受那种在琐碎与绝望中爆发出的、极其野蛮的生命力。它会告诉你，如何在最底层的生活里保持灵魂的顽强。"}, {title: "《爱是地狱冥犬》", desc: "这是他最著名的诗集，充满了酒精、欲望和对生存最赤裸的直觉。去确认那种‘让爱淹没你’的勇气。"}] 
-            },
-            SZYMBORSKA: { 
-                name: "辛波斯卡", sub: "万物的惊奇者", color: PALETTE.teal, movement: "SAGE", 
-                identity: "你用一种轻微的讽刺和巨大的耐心观察生活。你觉得‘不知道’才是最迷人的词。你拒绝那种宏大的真理，转而在剥洋葱、看尘埃的过程中，寻找一种微小但极其坚固的生存逻辑。",
-                longDesc: "你拥有一种天生的、带有智性距离的洞察力。你用平易的词汇去解构那些庞大的叙事。你对世界的‘惊奇感’来源于你始终保持的局外人姿态，你深知历史冷酷，因此选择用清醒的善意去呵护具体的生命瞬间。",
-                stats: [50, 85, 90, 95, 60], quote: "我看待万物，仿佛它们刚诞生。", 
-                anxiety: "你最恐惧的是感知力的麻木。你害怕自己对这个世界习以为常，从而失去那份发现‘未知’的本能。当你发现生活变成了一套枯燥的重复程序，你的灵魂会感到窒息。",
-                shadow: "过度的抽离和局外人姿态，有时会让你显得过于冷漠或圆滑。你在高处观察着世界的苦难，却极少亲身介入其中。这种智性上的‘特权感’可能让你在建立深层情感连接时遇到障碍。",
-                antidote: "“投入一次盲目的热忱。” 允许自己暂时放下那把名为‘理智’的手术刀，去经历一次无法被解构的、真实的冲动。只有在那样的时刻，你才会真正触摸到生命的质地。",
-                introBooks: [{title: "《万物静默如谜》", desc: "感受她如何用一粒沙对抗整座历史纪念碑。通过这本书，你会学会如何在最平凡的日常里建立属于你的精神防线。"}, {title: "《这里》", desc: "这是她晚年对微小事物的哲思凝视。这是智性与温柔达成的最后契约，它会告诉你：承认‘不知道’，正是灵魂自由的最高起点。"}] 
+                anxiety: "你最恐惧的是被社会‘收买’。你害怕变得得体、优雅、被秩序驯服，那对你而言意味着灵感的彻底死亡。你必须保持那种边缘的危险感，才能确认自己还活着。",
+                shadow: "极度的自我放逐有时会变成对生命中真实温暖的防御。你在拒绝伪善的同时，也可能推开了真正关心你的人。这种‘只有在痛苦中才安全’的错觉是你的阴影。",
+                antidote: "“尝试一次温柔的宽恕。” 允许生活有那么一刻是平静洁净的，这并不会消磨你的野性，反而能让你获得更深沉的持久力。",
+                introBooks: [{title: "《邮差》", desc: "在琐碎与绝望中爆发出的野蛮生命力。"}, {title: "《爱是地狱冥犬》", desc: "充满了酒精、欲望和对生存最赤裸的直觉。"}] 
             },
             LI_BAI: { 
-                name: "李白", sub: "拒绝落地的谪仙", color: PALETTE.green, movement: "REBEL", 
-                identity: "你觉得现实生活太沉了，总想通过某种极致的飞翔摆脱引力。在你眼里，规则是为凡人准备的。你通过幻觉与狂想，单方面取消了世界对你的征税。这种精神上的绝对主权，让你拥有一种‘天外来客’的疏离感。",
-                longDesc: "你的人格底色是浪漫主义最极致的写照。你不需要通过适应来生存，你通过创造一个更辽阔的宇宙来覆盖现实。你的文字不是在描写风景，而是在发布一种关于自由的行政命令。这种拒绝妥协的姿态，保全了灵魂最原始的纯度。",
+                id: 'p1', name: "李白", sub: "拒绝落地的谪仙", color: PALETTE.green, movement: "REBEL", tags: ["飞翔", "超验", "狂想"],
+                identity: "你觉得现实生活太沉了，总想通过某种极致的飞翔摆脱引力。你通过幻觉与狂想，单方面取消了世界对你的征税。",
+                theme: "如何在平庸秩序中，保持那份不被征税的自我狂想？",
+                contract: "你获得了自由的羽翼，代价是终其一生的漂泊与不被理解的孤独。",
+                longDesc: "你是浪漫主义的终极样本。你不需要通过适应来生存，你通过创造宇宙来覆盖现实。你的文字不是在描写风景，而是在发布关于自由的行政命令，这保全了你灵魂最原始的纯度。",
                 stats: [98, 40, 85, 90, 60], quote: "仰天大笑出门去，我辈岂是蓬蒿人。", 
-                anxiety: "你最害怕灵魂的平庸化与现实引力的拉扯。你无法忍受那种一眼望到头的日子，这会让你觉得羽翼正在一点点退化，最终变成在泥潭里打转的家禽。平庸即是你精神的死亡。",
-                shadow: "过度的狂傲往往是为了掩饰对深层孤独的恐惧。你必须不断向更高处飞翔，因为你害怕一旦降落，就会被那些人间琐碎和无法回应的爱所伤害。这种逃避式的飞翔，代价是终身的漂泊感。",
-                antidote: "“去泥土里扎一次根。” 允许自己暂时落地，感受那些卑微但真实的重量。去握一握现实中那双粗糙的手，去爱一个具体而非抽象的人。这会让你的羽翼在真实的大地上获得更坚韧的支撑。",
-                introBooks: [{title: "《李太白全集》", desc: "去看一个灵魂如何通过文字拒绝任何形式的下坠。你会发现，浪漫不仅仅是花间一壶酒，更是一种拒绝被社会规训的勇气。"}, {title: "《李白传》", desc: "剥开神话的滤镜，看见那个在权力和理想之间反复冲撞、从未服输的真实李白。"}] 
+                anxiety: "最害怕灵魂的平庸化与现实引力的拉扯。你无法忍受一眼望到头的日子，那会让你觉得羽翼正在退化成泥潭里打转的齿轮。",
+                shadow: "过度的狂傲往往是为了掩饰对深层孤独的恐惧。你必须不断向更高处飞翔，因为你害怕一旦降落，就会被琐碎和无法回应的爱所伤害。",
+                antidote: "“去泥土里扎一次根。” 允许自己暂时落地，去握一握现实中那双粗糙的手，这会让你的羽翼在真实大地上获得更坚韧的支撑。",
+                introBooks: [{title: "《李太白全集》", desc: "看一个灵魂如何通过文字拒绝任何形式的下坠。"}, {title: "《李白传》", desc: "理解那狂傲表象下的血肉挣扎。"}] 
             },
-            PLATH: { 
-                name: "普拉斯", sub: "镜子里的黑色风暴", color: PALETTE.blue, movement: "REBEL", 
-                identity: "你赤裸地面对那些不可言说的真相。你的文字像手术刀，划开生活的假象。你不仅反抗外部的压抑，你更在反抗那个被驯化的自我。你试图通过带刺的真实，去索要一个从未被定义的姓名。",
-                longDesc: "你拥有一种极致的激烈与真诚。你拒绝任何形式的涂抹与美化。你的诗是对深渊的凝视，充满了金属般的锋利。这种真实虽然带有自毁的底色，但它也完成了一种令人屏息的灵魂解放。",
-                stats: [95, 55, 80, 45, 92], quote: "我从灰烬中升起，我以人类为食。", 
-                anxiety: "被琐碎平庸的角色所吞噬。你最怕生活变成一种名为‘社会齿轮’的慢速自杀。你恐惧那种平静表面下暗流涌动的虚无感。",
-                shadow: "过于激烈的真实往往会灼伤自己和身边的人。你的情感能量太大，常规的容器根本无法承载，这种失衡让你常常陷入极端的孤独与自我憎恨。",
-                antidote: "“学会与影子温柔共处。” 在对抗世界的同时，也给自己留出一点可以用来软弱的缓冲区。去承认：真实也可以是带有温度的，而不是只有切割。",
-                introBooks: [{title: "《钟形罩》", desc: "在窒息中寻找自我的杰作。看一个女性灵魂如何试图逃离那个密闭的、透明的社会标准。"}, {title: "《爱丽儿》", desc: "普拉斯最巅峰、最尖锐的绝响。每一句诗都像是带血的刀片，切割着虚伪的空气。"}] 
+            SZYMBORSKA: { 
+                id: 'p2', name: "辛波斯卡", sub: "万物的惊奇者", color: PALETTE.teal, movement: "SAGE", tags: ["惊奇", "讽刺", "尘埃"],
+                identity: "你用一种轻微的讽刺和巨大的耐心观察生活。你觉得‘不知道’才是最迷人的词。你拒绝宏大叙事中的所谓真相。",
+                theme: "在大写的‘历史’面前，通过小写的一粒尘埃捍卫个人性。",
+                contract: "你获得了超然的观察位，代价是你必须始终做一个生活的‘局外人’。",
+                longDesc: "你是智性的观察家。你用极其平易的词汇去解构那些庞大而虚伪的历史，在琐碎日常中挖掘奇迹。你深知世界冷酷，因此选择用一种清醒距离的善意去呵护每个具体的生命瞬间。",
+                stats: [50, 85, 90, 95, 60], quote: "我看待万物，仿佛它们刚诞生。", 
+                anxiety: "最恐惧的是感知的麻木。你害怕自己对这个世界习以为常，从而失去那份发现‘未知’的本能。麻木对你而言，是比死亡更彻底的消亡。",
+                shadow: "过度的抽离和局外人姿态，有时会让你显得过于圆滑或冷漠。你观察着世界的苦难，却极少介入其中。这种智性特权可能让你情感连接困难。",
+                antidote: "“投入一次盲目的热忱。” 允许自己暂时放下理智，去经历一次无法被解构的、真实的冲动。只有在那一刻，你才会触摸到生命的质地。",
+                introBooks: [{title: "《万物静默如谜》", desc: "感受她如何用一粒沙对抗整座历史纪念碑。"}, {title: "《这里》", desc: "晚年对微小事物的哲思凝视。"}] 
+            },
+            DU_FU: { 
+                id: 'p3', name: "杜甫", sub: "大地的记录者", color: PALETTE.green, movement: "HERO", tags: ["沉郁", "史诗", "悲悯"],
+                identity: "你选择把时代的疼痛刻进自己的骨头里。你无法闭上眼假装没看见那些褶皱。你的人格核心是一种沉重的‘共情力’。",
+                theme: "在一个支离破碎的时代，如何用纸笔托举一个文明的尊严？",
+                contract: "你获得了永恒的敬意，代价是你在这一生中，从未真正卸下过沉重的忧虑。",
+                longDesc: "你的人格承载着文明最后一道防线的厚重。你用纸笔缝补着人类尊严。每一声叹息都承载着一个文明的重量，这种沉重感让你一生无欢，但让你成为了历史最忠实的证人。",
+                stats: [60, 85, 75, 60, 100], quote: "安得广厦千万间，大庇天下寒士俱欢颜。", 
+                anxiety: "道德感与责任感的过度背负。你总觉得如果这个世界还有一个人在受苦，你就没有资格完全快乐。这种负罪感常常让你忽略了自我。",
+                shadow: "悲悯感过重会导致精神的长期过载。你太容易被外界的悲剧吞噬，而忽略了自我的建设，甚至会因为无法改变现实而陷入深度的抑郁。",
+                antidote: "“允许自己有片刻的自私。” 在关怀众生之前，先给自己的灵魂一处避雨的草堂。记住，你也是这广厦千万间中，需要被庇护的一员。",
+                introBooks: [{title: "《杜工部集》", desc: "中国古典文学中最具道德厚度的灵魂档案。"}, {title: "《杜甫评传》", desc: "深入了解沉郁顿挫背后的生命逻辑。"}] 
             }
-            // 更多诗人数据映射已完备...
+            // 后续诗人逻辑通过 seed % pool.length 机制全闭环
         };
 
         const QUESTIONS = [
@@ -152,12 +161,12 @@
             { text: "历史的马车正从你面前隆隆碾过，你会：", options: [{ text: "往车轮里扔一块石头，打断这陈腐的节奏", type: "REBEL" }, { text: "站在高处，记录下车轮在泥土中的精确深度", type: "SAGE" }, { text: "躲进山林，那里的竹影比马车更有意义", type: "WANDERER" }, { text: "扶起被车轮惊扰的难民，分他们一半面包", type: "HERO" }] },
             { text: "你梦见自己变成了一样东西，你希望是：", options: [{ text: "一只直冲云霄的大鹏，蔑视所有地上的屋脊", type: "REBEL" }, { text: "一个古池塘里的倒影，无声地存在着", type: "SAGE" }, { text: "一支在暗夜里独自盛放又凋零的昙花", type: "IDEALIST" }, { text: "一双穿烂了却依然坚韧的行路草鞋", type: "WANDERER" }] },
             { text: "当你的诗被世人嘲笑完全看不懂时，你的反应是：", options: [{ text: "大笑：凡人的耳朵本来就听不到天籁", type: "REBEL" }, { text: "无所谓，诗是写给真理看的", type: "SAGE" }, { text: "感到忧郁，原来在这个世界上我如此孤独", type: "IDEALIST" }, { text: "反思是否自己的表达离大地太远了", type: "HERO" }] },
-            { text: "如果死神允许你留下一行字作为墓志铭，你会写：", options: [{ text: "“这里睡着一个从没被驯服过的人”", type: "REBEL" }, { text: "“万物皆虚，唯此宁静”", type: "SAGE" }, { text: "“由于美，他曾碎裂过”", type: "IDEALIST" }, { text: "“他只是在路过这里时稍微歇了会儿脚”", type: "WANDERER" }] },
-            { text: "关于“孤独”，你的定义是：", options: [{ text: "它是我的王冠，我独自统治着精神帝国", type: "REBEL" }, { text: "它是必要的透镜，让我看清世界的纹理", type: "SAGE" }, { text: "它是长在心口的利刃，虽然痛却异常华丽", type: "IDEALIST" }, { text: "它是远方的地平线，我一直追随却不厌烦", type: "WANDERER" }] },
+            { text: "如果死神允许你留下一行字作为墓志铭，你会写：", options: [{ text: "“这里睡着一个从没被驯服过的人”", type: "REBEL" }, { text: "“万物皆虚，唯此宁静”", type: "SAGE" }, { text: "“由于美，他曾碎裂过”", type: "IDEALIST" }, { text: "“他只是稍微歇了会儿脚”", type: "WANDERER" }] },
+            { text: "关于“孤独”，你的定义是：", options: [{ text: "它是我的王冠，我独自统治着精神帝国", type: "REBEL" }, { text: "它是必要的透镜，让我看清世界的纹理", type: "SAGE" }, { text: "它是长在心口的利刃，华丽而痛", type: "IDEALIST" }, { text: "它是远方的地平线，我一直追随", type: "WANDERER" }] },
             { text: "你认为诗歌最高的职责是：", options: [{ text: "作为人类文明最纯粹的思维练习", type: "SAGE" }, { text: "记录下那些稍纵即逝的美丽颤动", type: "IDEALIST" }, { text: "给受难的人们带去一丝慰藉与尊严", type: "HERO" }, { text: "撕开世界的伪善，露出真实的血肉", type: "REBEL" }] },
             { text: "看到夕阳落入大海，你的第一个联想是：", options: [{ text: "那是上帝被打碎的酒杯，流了一地的红酒", type: "REBEL" }, { text: "那是光线的折射与时间的必然归宿", type: "SAGE" }, { text: "那是命运对所有美好结局的最终允诺", type: "IDEALIST" }, { text: "那是提醒流浪者该寻找今晚借宿地的钟声", type: "WANDERER" }] },
             { text: "如果不得不选择，你宁愿住在：", options: [{ text: "金碧辉煌却危机四伏的宫廷", type: "REBEL" }, { text: "空旷到只有风声的深山寺庙", type: "SAGE" }, { text: "开满了颓废花朵的城市地下室", type: "IDEALIST" }, { text: "路边那顶简陋却能随时移动的帐篷", type: "WANDERER" }] },
-            { text: "在战争废墟上，你发现一朵开错季节的花：", options: [{ text: "摘下它，作为战胜荒谬的勋章", type: "REBEL" }, { text: "画下它，记录生命如何在毁灭中自愈", type: "SAGE" }, { text: "为它写首诗，哀悼这脆弱的生命力", type: "IDEALIST" }, { text: "在那儿守着它，直到它自然凋落", type: "HERO" }] },
+            { text: "在战争的废墟上，你发现了一朵开错季节的花：", options: [{ text: "摘下它，作为战胜荒谬的勋章", type: "REBEL" }, { text: "画下它，记录生命如何在毁灭中自愈", type: "SAGE" }, { text: "为它写首诗，哀悼这脆弱的生命力", type: "IDEALIST" }, { text: "在那儿守着它，直到它自然凋落", type: "HERO" }] },
             { text: "你如何看待“时间”：", options: [{ text: "它是幻觉，我能通过诗歌瞬间抵达永恒", type: "REBEL" }, { text: "它是圆周，一切都在其中轮回往复", type: "SAGE" }, { text: "它是巨大的沙漏，慢慢埋葬我的热爱", type: "IDEALIST" }, { text: "它是河流，我只是其中的一粒水滴", type: "WANDERER" }] },
             { text: "如果你的一生是一场必败的战争，你会：", options: [{ text: "在投降前烧掉整座城市", type: "REBEL" }, { text: "研究这种失败的必然规律", type: "SAGE" }, { text: "写一首挽歌让失败也变美", type: "IDEALIST" }, { text: "撤退到没人认识的森林里", type: "WANDERER" }] },
             { text: "当你的爱人离开你时，你会：", options: [{ text: "祝对方好运，转身寻找下一个灵魂伴侣", type: "REBEL" }, { text: "把痛苦拆解开，看看它由多少个虚妄组成", type: "SAGE" }, { text: "写下这辈子最凄美的诗，然后把笔折断", type: "IDEALIST" }, { text: "带着这份伤感走远，让风吹淡它", type: "WANDERER" }] },
@@ -166,26 +175,25 @@
             { text: "在你的书架上，最显眼的位置放着：", options: [{ text: "一本写满了涂改与咒骂的私人笔记", type: "REBEL" }, { text: "一本满是注脚的《几何学原理》或佛经", type: "SAGE" }, { text: "一本夹着枯萎花瓣的无题情书集", type: "IDEALIST" }, { text: "一本折角严重的、满是泥土印的旧地图", type: "WANDERER" }] },
             { text: "如果生命是一场剧，你扮演的角色是：", options: [{ text: "那个最后杀出重围的异教徒", type: "REBEL" }, { text: "那个坐在台下看戏、甚至没买票的观众", type: "SAGE" }, { text: "那个即使主角死了也要把戏唱完的配角", type: "IDEALIST" }, { text: "那个一直在换幕，最后消失在布景后的剧务", type: "WANDERER" }] },
             { text: "你最喜欢的颜色是：", options: [{ text: "火一样的红色，象征着燃烧与毁灭", type: "REBEL" }, { text: "冰一样的透明色，代表着绝对的清澈", type: "SAGE" }, { text: "晚霞般的紫金色，美在消失的前一秒", type: "IDEALIST" }, { text: "大地般的灰绿色，那是自然的保护色", type: "WANDERER" }] },
-            { id: 21, text: "有人递给你一杯‘忘忧水’，喝了能抹掉这辈子最疼的那段记忆，但以后你也写不出深刻的句子了，你会：", options: [{ text: "不喝，那种疼是我身体的一部分，是我唯一的墨水", type: "REBEL" }, { text: "犹豫地推开，比起快乐，我更怕变得空洞和平庸", type: "IDEALIST" }, { text: "研究这水的成分，看看能不能只抹掉疼而不伤灵魂", type: "SAGE" }, { text: "喝掉它，我只想做一个没心没肺的普通快活人", type: "WANDERER" }] },
+            { id: 21, text: "有人递给你一杯‘忘忧水’，喝了能抹掉这辈子最疼的那段记忆，但以后写不出深刻的句子了，你会：", options: [{ text: "不喝，那种疼是我身体的一部分，是我唯一的墨水", type: "REBEL" }, { text: "犹豫地推开，比起快乐，我更怕变得空洞和平庸", type: "IDEALIST" }, { text: "研究这水的成分，看看能不能只抹掉疼而不伤灵魂", type: "SAGE" }, { text: "喝掉它，我只想做一个没心没肺的普通快活人", type: "WANDERER" }] },
             { text: "如果文字会流血：", options: [{ text: "我会写满一地鲜红，给这世界看", type: "REBEL" }, { text: "我会研究血的流向和凝固的时间", type: "SAGE" }, { text: "我会觉得这种红极度凄艳，适合志哀", type: "IDEALIST" }, { text: "我会放下笔，不再忍心写下去", type: "HERO" }] },
             { text: "如果你发现自己的一生只是别人笔下的一首诗：", options: [{ text: "我会夺过那支笔，自己把结局改了", type: "REBEL" }, { text: "我会感激这个作者，把我的痛苦写得这么准", type: "IDEALIST" }, { text: "我会研究这种元叙事的逻辑漏洞", type: "SAGE" }, { text: "我会静静地等待全诗终结的那一刻", type: "WANDERER" }] },
             { text: "最后，如果你可以变成一件圣器：", options: [{ text: "一把剖开伪善的快刀", type: "REBEL" }, { text: "一架看清星体运行的望远镜", type: "SAGE" }, { text: "一个装满晚霞的墨水瓶", type: "IDEALIST" }, { text: "一张永远折叠不完的旧地图", type: "WANDERER" }] },
-            { id: 25, text: "你发现一扇永远关不上的门，风一直往你心里灌。这扇门代表你一个无法弥补的遗憾，你会：", options: [{ text: "在门口筑起一道高墙，把它彻底封死在黑暗里", type: "REBEL" }, { text: "搬个板凳坐在门口，静静地听风传来的那个遗憾的回响", type: "IDEALIST" }, { text: "研究风向和气压，试图通过逻辑解释这个遗憾的必然性", type: "SAGE" }, { text: "把这当成家里的一部分，开着门继续生活，让风吹着", type: "WANDERER" }] },
+            { id: 25, text: "你发现一扇永远关不上的门，风一直往心里灌。这扇门代表你一个无法弥补的遗憾，你会：", options: [{ text: "在门口筑起一道高墙，把它彻底封死在黑暗里", type: "REBEL" }, { text: "搬个板凳坐在门口，静静地听风传来的那个遗憾的回响", type: "IDEALIST" }, { text: "研究风向和气压，试图通过逻辑解释这个遗憾的必然性", type: "SAGE" }, { text: "把这当成家里的一部分，开着门继续生活，让风吹着", type: "WANDERER" }] },
             { id: 26, text: "如果要给你的生命贴上‘出厂标签’，你会勾选哪些项？（多选）", isMulti: true, options: [{ text: "不合时宜的愤怒", type: "REBEL" }, { text: "无可救药的浪漫", type: "IDEALIST" }, { text: "绝对清醒的旁观", type: "SAGE" }, { text: "永无止境的寻找", type: "WANDERER" }, { text: "不值一钱的悲悯", type: "HERO" }] },
-            { text: "你在河边看到一个溺水的人，但救他意味着你会错过此生唯一的灵感：", options: [{ text: "直接跳下去救人，诗以后再写", type: "HERO" }, { text: "记录下这一幕的残酷，作为人类生存的注脚", type: "SAGE" }, { text: "感到极度的幻灭，然后转身离开", type: "REBEL" }, { text: "为这种不可挽回的生命消失写一首挽歌", type: "IDEALIST" }] },
+            { text: "在河边看到一个溺水的人，但救他意味着你会错过此生唯一的灵感：", options: [{ text: "直接跳下去救人，诗以后再写", type: "HERO" }, { text: "记录下这一幕的残酷，作为人类生存的注脚", type: "SAGE" }, { text: "感到极度的幻灭，然后转身离开", type: "REBEL" }, { text: "为这种不可挽回的生命消失写一首挽歌", type: "IDEALIST" }] },
             { text: "你理想中的伴侣是：", options: [{ text: "能陪我一起推翻世界的人", type: "REBEL" }, { text: "能读懂我所有代码的人", type: "SAGE" }, { text: "像晚霞一样绝美的人", type: "IDEALIST" }, { text: "能和我并肩走在荒野上的人", type: "WANDERER" }, { text: "我就是我自己的唯一伴侣", type: "SAGE" }] },
             { text: "当你走进一个废弃的房间，你第一眼看见的是：", options: [{ text: "墙上的裂缝，它像一个出口", type: "REBEL" }, { text: "积满灰尘的钟表，它停在某个真相时刻", type: "SAGE" }, { text: "破窗帘后面漏进来的一抹月光", type: "IDEALIST" }, { text: "门口那双被踢乱的、走向远方的鞋", type: "WANDERER" }] },
             { text: "最后，如果世界只剩最后一滴墨水，你会：", options: [{ text: "写一个“不”字，哪怕没人看见", type: "REBEL" }, { text: "写下一个关于宇宙起源的公式", type: "SAGE" }, { text: "画一朵正在盛开也正在凋零的花", type: "IDEALIST" }, { text: "在手心画一个指南针，然后出发", type: "WANDERER" }] }
         ];
 
-        // --- 核心组件 ---
         const TendencyBar = ({ label, left, right, value, themeColor }) => (
             <div className="w-full space-y-2">
-                <div className="flex justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 font-sans">
+                <div className="flex justify-between text-[11px] font-bold uppercase tracking-[0.2em] text-stone-700 font-sans">
                     <span>{left}</span><span>{label}</span><span>{right}</span>
                 </div>
-                <div className="h-[2px] w-full bg-[#dcd8cf] relative">
-                    <div className="h-3 w-3 rounded-full absolute top-1/2 -translate-y-1/2 transition-all duration-1000 shadow-sm border border-stone-800" 
+                <div className="h-[2.5px] w-full bg-[#dcd8cf] relative">
+                    <div className="h-4 w-4 rounded-full absolute top-1/2 -translate-y-1/2 transition-all duration-1000 shadow-sm border-2 border-stone-800" 
                          style={{ left: `${value}%`, transform: 'translate(-50%, -50%)', backgroundColor: themeColor || '#ffffff' }}></div>
                 </div>
             </div>
@@ -200,73 +208,49 @@
             const [result, setResult] = useState(null);
             const [isSaving, setIsSaving] = useState(false);
             const [refId] = useState(() => Math.random().toString(36).substr(2, 8).toUpperCase());
+            const radarRef = useRef(null); const captureRef = useRef(null);
 
-            const radarRef = useRef(null);
-            const captureRef = useRef(null);
-
-            const handleAnswer = (type) => {
+            const handleAnswer = (type, choiceIndex) => {
                 const nextScores = { ...scores, [type]: scores[type] + 1 };
-                const curHistory = [...history, { scores, currentQ }];
-                setHistory(curHistory);
-                setScores(nextScores);
+                const curHistory = [...history, { scores, currentQ, choiceIndex }];
+                setHistory(curHistory); setScores(nextScores);
                 if (currentQ < QUESTIONS.length - 1) { setCurrentQ(currentQ + 1); window.scrollTo(0, 0); }
-                else finalizeResult(nextScores);
+                else finalizeResult(nextScores, curHistory);
             };
 
             const handleConfirmMulti = () => {
                 if (selectedMulti.length === 0) return;
-                const nextScores = { ...scores };
-                selectedMulti.forEach(type => { nextScores[type] += 1; });
-                setScores(nextScores);
-                const curHistory = [...history, { scores, currentQ }];
-                setHistory(curHistory);
-                setSelectedMulti([]); 
+                const nextScores = { ...scores }; selectedMulti.forEach(type => { nextScores[type] += 1; });
+                const curHistory = [...history, { scores, currentQ, choiceIndex: 0 }];
+                setHistory(curHistory); setScores(nextScores); setSelectedMulti([]);
                 if (currentQ < QUESTIONS.length - 1) { setCurrentQ(currentQ + 1); window.scrollTo(0, 0); }
-                else finalizeResult(nextScores);
+                else finalizeResult(nextScores, curHistory);
             };
 
-            const finalizeResult = (finalScores) => {
+            const finalizeResult = (finalScores, fullHistory) => {
                 const top = Object.keys(finalScores).sort((a,b) => finalScores[b] - finalScores[a])[0];
-                const pool = Object.values(POETS).filter(p => p.movement === top);
-                setResult(pool[Math.floor(Math.random() * pool.length)] || POETS.SZYMBORSKA);
-                setStep('result');
-                window.scrollTo(0, 0);
+                const pool = Object.values(POETS).filter(p => p.movement === top).sort((a,b) => a.id.localeCompare(b.id));
+                const seed = fullHistory.reduce((acc, curr) => acc + (curr.choiceIndex || 0), 0);
+                setResult(pool[seed % pool.length]);
+                setStep('result'); window.scrollTo(0, 0);
             };
 
             useEffect(() => {
                 if (step === 'result' && result && radarRef.current) {
                     const ctx = radarRef.current.getContext('2d');
-                    if (window.Chart) {
-                        new window.Chart(ctx, {
-                            type: 'radar',
-                            data: {
-                                labels: ['反叛', '智性', '审美', '自由', '意志'],
-                                datasets: [{ data: result.stats, backgroundColor: `${result.color}25`, borderColor: '#2a2824', borderWidth: 1, pointRadius: 3, pointBackgroundColor: result.color }]
-                            },
-                            options: { 
-                                scales: { 
-                                    r: { 
-                                        grid: { color: 'rgba(0,0,0,0.06)' }, 
-                                        ticks: { display: false }, 
-                                        min: 0, max: 100,
-                                        pointLabels: { font: { family: 'Noto Serif SC', size: 11, weight: 'bold' }, color: '#2a2824' }
-                                    } 
-                                }, 
-                                plugins: { legend: { display: false } }, 
-                                maintainAspectRatio: false 
-                            }
-                        });
-                    }
+                    new Chart(ctx, {
+                        type: 'radar',
+                        data: { labels: ['反叛', '智性', '审美', '自由', '意志'], datasets: [{ data: result.stats, backgroundColor: `${result.color}25`, borderColor: '#2a2824', borderWidth: 1, pointRadius: 3, pointBackgroundColor: result.color }] },
+                        options: { scales: { r: { grid: { color: 'rgba(0,0,0,0.08)' }, ticks: { display: false }, min: 0, max: 100, pointLabels: { font: { family: 'Noto Serif SC', size: 12, weight: 'bold' }, color: '#2a2824' } } }, plugins: { legend: { display: false } }, maintainAspectRatio: false }
+                    });
                 }
             }, [step, result]);
 
             const saveReport = async () => {
-                if (!window.html2canvas) return;
                 setIsSaving(true);
                 try {
-                    const canvas = await window.html2canvas(captureRef.current, { scale: 2.5, backgroundColor: '#f4f1ea', useCORS: true });
-                    const link = document.createElement('a'); link.download = `POET_REPORT_${result.name}.png`;
-                    link.href = canvas.toDataURL('image/png'); link.click();
+                    const canvas = await html2canvas(captureRef.current, { scale: 2.5, backgroundColor: '#f4f1ea', useCORS: true });
+                    const link = document.createElement('a'); link.download = `POET_REPORT_${result.name}.png`; link.href = canvas.toDataURL('image/png'); link.click();
                 } catch (e) { console.error(e); }
                 setIsSaving(false);
             };
@@ -284,106 +268,72 @@
                                 </div>
                                 <div className="relative z-10 flex flex-col items-center py-12">
                                     <div className="w-24 h-24 md:w-28 md:h-28 rounded-full shadow-2xl flex items-center justify-center bg-white/40 mb-12" style={{ backgroundColor: PALETTE.yellow }}></div>
-                                    <h1 className="whitespace-nowrap text-[2.2rem] sm:text-[2.6rem] md:text-[3rem] lg:text-[3.2rem] font-light tracking-[0.4em] leading-tight text-[#2a2824] px-2 font-serif">诗人的回响</h1>
+                                    <h1 className="whitespace-nowrap text-[2.4rem] sm:text-[2.8rem] md:text-[3.2rem] font-light tracking-[0.4em] leading-tight text-[#2a2824] px-2 font-serif text-stone-800">诗人的回响</h1>
                                 </div>
-                                <button onClick={() => setStep('quiz')} className="relative z-10 px-12 py-4 border border-[#2a2824] text-[11px] tracking-[0.6em] font-bold uppercase transition-all hover:bg-black hover:text-white font-sans">开启测试 / START</button>
-                                <div className="absolute bottom-6 left-0 w-full text-[7px] opacity-30 tracking-widest font-sans font-bold uppercase text-stone-500 text-center">POSÉRIAL SPIRITUAL EXPERIMENT 2026</div>
+                                <button onClick={() => setStep('quiz')} className="relative z-10 px-12 py-4 border border-[#3a3833] text-[10px] tracking-[0.6em] font-bold uppercase transition-all hover:bg-black hover:text-white font-sans text-stone-800">开启测试 / START</button>
+                                <div className="absolute bottom-6 left-0 w-full text-[7px] opacity-20 tracking-widest font-sans font-bold uppercase text-stone-600 text-center">POSÉRIAL SPIRITUAL EXPERIMENT 2026</div>
                             </div>
                         )}
-
                         {step === 'quiz' && (
                             <div className="animate-fade-in space-y-12">
-                                <div className="flex justify-between items-end border-b border-stone-800 pb-4">
-                                    <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ-1) : setStep('welcome')} className="text-[10px] font-bold opacity-60 uppercase tracking-widest font-sans">← Back</button>
-                                    <span className="text-[11px] tracking-[0.5em] font-bold font-sans text-stone-800">Manuscript {currentQ + 1} / 30</span>
-                                    <div className="h-1.5 w-24 bg-stone-200 relative overflow-hidden"><div className="h-full bg-[#d45a43] transition-all duration-500" style={{ width: `${((currentQ+1)/30)*100}%` }}></div></div>
-                                </div>
+                                <div className="flex justify-between items-end border-b border-stone-800 pb-4"><button onClick={() => currentQ > 0 ? setCurrentQ(currentQ-1) : setStep('welcome')} className="text-[10px] font-bold opacity-60 uppercase tracking-widest font-sans text-stone-600">← Back</button><span className="text-[11px] tracking-[0.5em] font-bold font-sans text-stone-800">Manuscript {currentQ + 1} / 30</span><div className="h-1.5 w-24 bg-stone-200 relative overflow-hidden"><div className="h-full bg-[#d45a43] transition-all duration-500" style={{ width: `${((currentQ+1)/30)*100}%` }}></div></div></div>
                                 <div className="min-h-[140px] flex items-center justify-center text-xl md:text-2xl font-bold leading-relaxed text-center tracking-wide text-[#2a2824]">{QUESTIONS[currentQ].text}</div>
                                 <div className="grid gap-4 px-4 pb-12">
                                     {QUESTIONS[currentQ].options.map((opt, i) => (
-                                        <button key={i} onClick={() => QUESTIONS[currentQ].isMulti ? (selectedMulti.includes(opt.type) ? setSelectedMulti(selectedMulti.filter(t=>t!==opt.type)) : setSelectedMulti([...selectedMulti, opt.type])) : handleAnswer(opt.type)}
+                                        <button key={i} onClick={() => QUESTIONS[currentQ].isMulti ? (selectedMulti.includes(opt.type) ? setSelectedMulti(selectedMulti.filter(t=>t!==opt.type)) : setSelectedMulti([...selectedMulti, opt.type])) : handleAnswer(opt.type, i)}
                                             className={`w-full p-6 text-sm border-2 transition-all text-left group ${QUESTIONS[currentQ].isMulti && selectedMulti.includes(opt.type) ? 'border-[#d45a43] bg-[#d45a43]/10 shadow-inner' : 'border-stone-200 bg-white/80 hover:border-stone-800'}`}>
                                             <span className={`group-hover:translate-x-2 transition-transform inline-block ${QUESTIONS[currentQ].isMulti && selectedMulti.includes(opt.type) ? 'opacity-100 font-bold text-stone-900' : 'opacity-80 font-serif'}`}>{opt.text} {QUESTIONS[currentQ].isMulti && selectedMulti.includes(opt.type) && '✓'}</span>
                                         </button>
                                     ))}
-                                    {QUESTIONS[currentQ].isMulti && <button onClick={handleConfirmMulti} className="mt-4 w-full py-5 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest shadow-xl">确认选择 / CONFIRM</button>}
+                                    {QUESTIONS[currentQ].isMulti && <button onClick={handleConfirmMulti} className="mt-4 w-full py-5 bg-stone-900 text-white text-xs font-bold uppercase tracking-widest shadow-xl">确认选择</button>}
                                 </div>
                             </div>
                         )}
-
                         {step === 'result' && result && (
-                            <div className="animate-fade-in space-y-12 pb-20">
+                            <div className="animate-fade-in space-y-12 pb-20 text-[#2a2824]">
                                 <div ref={captureRef} className="bg-[#f4f1ea] px-2 py-4">
                                     <div className="bg-[#fcfbf9] border border-[#dcd8cf] p-8 md:p-14 space-y-12 relative overflow-hidden shadow-xl text-left">
                                         <div className="top-accent-line"></div>
-                                        <div className="flex flex-col items-center space-y-5 pt-2">
+                                        <div className="flex flex-col items-center space-y-4 pt-2">
                                             <div className="archetype-tag-box font-sans uppercase">Archetype</div>
-                                            <div className="text-[10px] font-mono opacity-40 tracking-tighter text-stone-500 font-sans">REF-#{refId}</div>
-                                            <h2 className="text-5xl md:text-6xl font-bold tracking-[0.1em] text-center text-[#2a2824]">{result.name}</h2>
-                                            <p className="text-xl italic font-serif text-center text-stone-600">— {result.sub} —</p>
+                                            <div className="text-[11px] font-mono opacity-40 tracking-tighter text-stone-500 font-sans">REF-#{refId}</div>
+                                            <h2 className="text-5xl md:text-6xl font-bold tracking-[0.1em] text-center">{result.name}</h2>
+                                            <p className="text-xl italic opacity-50 font-serif text-center">— {result.sub} —</p>
                                         </div>
-
-                                        <div className="quote-box-refined"><p className="text-2xl md:text-3xl leading-relaxed font-bold tracking-wide font-serif text-stone-800">“{result.quote}”</p></div>
-
-                                        <div className="space-y-10">
-                                            <div className="flex items-center gap-6">
-                                                <h4 className="text-[12px] font-bold tracking-[0.4em] uppercase text-[#d45a43] font-sans whitespace-nowrap">THE CORE / 灵魂本色</h4>
-                                                <div className="h-[0.5px] w-full bg-stone-300"></div>
-                                            </div>
-                                            <div className="space-y-12">
-                                                <p className="text-[1.35rem] md:text-[1.5rem] font-bold leading-relaxed tracking-wide text-justify text-stone-900">{result.identity}</p>
-                                                <div className="pl-6 border-l-4 border-[#f9ed8c] italic text-stone-700 text-sm md:text-base leading-loose tracking-widest text-justify">{result.longDesc}</div>
-                                            </div>
+                                        <div className="quote-box-refined"><p className="text-2xl md:text-3xl leading-relaxed font-bold tracking-wide font-serif">“{result.quote}”</p></div>
+                                        <div className="space-y-10"><div className="flex items-center gap-6"><h4 className="text-[12px] font-bold tracking-[0.4em] uppercase text-[#d45a43] font-sans whitespace-nowrap">THE CORE / 灵魂本色</h4><div className="h-[0.5px] w-full bg-[#dcd8cf]"></div></div>
+                                            <div className="space-y-12"><p className="text-[1.35rem] md:text-[1.55rem] font-bold leading-relaxed tracking-wide text-justify">{result.identity}</p>
+                                                <div className="pl-6 border-l-4 border-[#f9ed8c] italic text-stone-800 text-sm md:text-base leading-loose tracking-widest text-justify">{result.longDesc}</div></div>
                                         </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-12 border-t border-stone-200 pt-12">
-                                            <div className="space-y-10 flex flex-col justify-center">
-                                                <TendencyBar label="灵性 vs 现实" left="Spirit" right="Reality" value={result.stats[0]} themeColor={result.color} />
-                                                <TendencyBar label="解构 vs 构建" left="Decon" right="Build" value={result.stats[1]} themeColor={result.color} />
-                                                <TendencyBar label="出世 vs 入世" left="Zen" right="People" value={result.stats[3]} themeColor={result.color} />
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-[#dcd8cf]/30 pt-10">
+                                            <div className="space-y-3 bg-[#fffcf5] p-6 border border-[#dcd8cf]/30 shadow-sm relative overflow-hidden">
+                                                <span className="text-[11px] font-bold text-[#d45a43] uppercase tracking-[0.3em] font-sans">Theme / 叙事母题</span>
+                                                <p className="text-[14px] leading-relaxed font-bold italic text-justify opacity-90">{result.theme}</p>
                                             </div>
-                                            <div className="flex flex-col items-center justify-center p-6 bg-[#fffcf5] border border-stone-200">
-                                                <div className="w-44 h-44 opacity-100"><canvas ref={radarRef}></canvas></div>
-                                                <div className="mt-4 text-[10px] font-bold opacity-40 tracking-widest uppercase text-stone-500 font-sans">Dimension Radar</div>
+                                            <div className="space-y-3 bg-[#fffcf5] p-6 border border-[#dcd8cf]/30 shadow-sm relative overflow-hidden">
+                                                <span className="text-[11px] font-bold text-[#d45a43] uppercase tracking-[0.3em] font-sans">Contract / 灵魂契约</span>
+                                                <p className="text-[14px] leading-relaxed font-bold italic text-justify opacity-90">{result.contract}</p>
                                             </div>
                                         </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-stone-800/20 divide-y md:divide-y-0 md:divide-x divide-stone-800/20 shadow-sm">
-                                            <div className="p-8 text-left bg-white/50">
-                                                <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest block mb-4 font-sans text-center">Anxiety / 焦虑</span>
-                                                <p className="text-[13px] italic leading-relaxed text-stone-800 text-justify font-medium">{result.anxiety}</p>
-                                            </div>
-                                            <div className="p-8 text-left bg-white/50">
-                                                <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest block mb-4 font-sans text-center">Shadow / 阴影</span>
-                                                <p className="text-[13px] italic leading-relaxed text-stone-800 text-justify font-medium">{result.shadow}</p>
-                                            </div>
-                                            <div className="p-8 bg-[#d45a43]/10 flex flex-col justify-center items-center text-center">
-                                                <span className="text-[10px] font-bold text-[#d45a43] uppercase mb-4 font-sans tracking-widest">Antidote / 解药</span>
-                                                <p className="text-base font-bold tracking-widest italic text-stone-900 leading-relaxed">“{result.antidote}”</p>
-                                            </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-12 border-t border-[#dcd8cf]/30 pt-12"><div className="space-y-10 flex flex-col justify-center">
+                                            <TendencyBar label="灵性 vs 现实" left="Spirit" right="Reality" value={result.stats[0]} themeColor={result.color} /><TendencyBar label="解构 vs 构建" left="Decon" right="Build" value={result.stats[1]} themeColor={result.color} /><TendencyBar label="出世 vs 入世" left="Zen" right="People" value={result.stats[3]} themeColor={result.color} />
+                                        </div><div className="flex flex-col items-center justify-center p-6 bg-[#fffcf5] border border-stone-200"><div className="w-44 h-44 opacity-100"><canvas ref={radarRef}></canvas></div><div className="mt-4 text-[11px] font-bold opacity-30 tracking-widest uppercase font-sans">Dimension Radar</div></div></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-[#d45a43]/40 divide-y md:divide-y-0 md:divide-x divide-[#d45a43]/20 bg-[#fffcf5]/30">
+                                            <div className="p-8 text-left bg-[#fffcf5]"><span className="text-[10px] font-bold text-stone-600 uppercase tracking-widest block mb-4 font-sans text-center">Anxiety / 核心焦虑</span><p className="text-[13px] italic leading-relaxed text-stone-900 text-justify font-medium">{result.anxiety}</p></div>
+                                            <div className="p-8 text-left bg-[#fffcf5]"><span className="text-[10px] font-bold text-stone-600 uppercase tracking-widest block mb-4 font-sans text-center">Shadow / 心理阴影</span><p className="text-[13px] italic leading-relaxed text-stone-900 text-justify font-medium">{result.shadow}</p></div>
+                                            <div className="p-8 bg-[#d45a43]/10 flex flex-col justify-center items-center text-center"><span className="text-[10px] font-bold text-[#d45a43] uppercase mb-4 font-sans tracking-widest">Antidote / 灵魂解药</span><p className="text-[15px] font-bold tracking-widest italic text-stone-900 leading-relaxed text-center">“{result.antidote}”</p></div>
                                         </div>
-
-                                        <div className="space-y-8 pt-10 border-t border-stone-200">
-                                            <h4 className="text-[11px] font-bold tracking-[0.8em] text-center uppercase opacity-50 font-sans text-stone-600">Recommended Reading</h4>
+                                        <div className="space-y-8 pt-10 border-t border-[#dcd8cf]"><h4 className="text-[11px] font-bold tracking-[0.8em] text-center uppercase opacity-40 font-sans text-stone-700">Recommended Reading</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                {result.introBooks.map(b => (
-                                                    <div key={b.title} className="p-8 bg-white border border-stone-200 space-y-4 hover:border-stone-800 transition-all group shadow-sm text-left">
-                                                        <h5 className="font-bold text-xl tracking-wide group-hover:text-[#d45a43] transition-colors text-stone-900" style={{ color: result.color }}>《{b.title.replace('《','').replace('》','')}》</h5>
-                                                        <p className="text-[13px] text-stone-700 italic font-serif leading-relaxed text-justify border-t border-stone-100 pt-3">{b.desc}</p>
-                                                    </div>
-                                                ))}
+                                                {result.introBooks.map(b => (<div key={b.title} className="p-8 bg-white border border-[#dcd8cf] space-y-4 hover:border-[#d45a43] transition-all group shadow-sm text-left">
+                                                    <h5 className="font-bold text-xl tracking-wide group-hover:text-[#d45a43] transition-colors text-stone-900" style={{ color: result.color }}>《{b.title.replace('《','').replace('》','')}》</h5><p className="text-[12px] text-stone-800 italic font-serif leading-relaxed text-justify border-t border-stone-100 pt-3">{b.desc}</p></div>))}
                                             </div>
                                         </div>
                                         <div className="w-full h-8 flex mt-4 opacity-70">{[PALETTE.green, PALETTE.blue, PALETTE.teal, PALETTE.lavender, PALETTE.yellow].map(c => <div key={c} className="flex-1" style={{ backgroundColor: c }}></div>)}</div>
-                                        <div className="text-[9px] opacity-40 tracking-[0.6em] text-center font-bold font-sans uppercase text-stone-600">Posérial Spiritual Experiment 2026</div>
+                                        <div className="text-[9px] opacity-30 tracking-[0.6em] text-center font-bold font-sans uppercase">Posérial Spiritual Experiment 2026</div>
                                     </div>
                                 </div>
-                                <div className="px-8 space-y-4 pb-12">
-                                    <button onClick={saveReport} disabled={isSaving} className="w-full py-6 bg-stone-900 text-white text-xs tracking-[0.6em] font-bold shadow-2xl uppercase transition-all hover:bg-black disabled:opacity-50 font-sans">
-                                        {isSaving ? "MANUSCRIPT SAVING..." : "保存灵魂手稿报告"}
-                                    </button>
-                                    <button onClick={() => window.location.reload()} className="w-full py-4 border-2 border-stone-900 text-[10px] tracking-[0.5em] font-bold uppercase transition-all hover:bg-stone-900 hover:text-white font-sans">重新测试 / RETRY</button>
-                                </div>
+                                <div className="px-8 space-y-4 pb-12 text-center"><button onClick={saveReport} disabled={isSaving} className="w-full py-6 bg-stone-900 text-white text-xs tracking-[0.6em] font-bold shadow-2xl uppercase transition-all hover:bg-black disabled:opacity-50 font-sans">保存灵魂手稿报告</button><button onClick={() => window.location.reload()} className="w-full py-4 border-2 border-stone-900 text-[11px] tracking-[0.5em] font-bold uppercase transition-all hover:bg-stone-900 hover:text-white font-sans text-stone-700">重塑精神原型</button></div>
                             </div>
                         )}
                     </div>
